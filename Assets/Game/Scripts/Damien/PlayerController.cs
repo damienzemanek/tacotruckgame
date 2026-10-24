@@ -25,12 +25,13 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        var xInputScalar = Input.GetAxis("Horizontal");
         var yInputScalar = Input.GetAxis("Vertical");
+        var xInputScalar = Input.GetAxis("Horizontal");
         var fwd = camTransform.forward * yInputScalar;
         var right = camTransform.right * xInputScalar;
         var moveDir = fwd + right;
         moveDir.y = 0;
         charController.Move(moveDir * speed * Time.deltaTime);
+        //transform.Translate(moveDir * speed * Time.deltaTime);
     }
 }
