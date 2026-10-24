@@ -14,19 +14,27 @@ public class Interactor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Physics.Raycast(_camera.transform.position , _camera.transform.forward , out RaycastHit hit, _interactDistance))
+
+        //if (Input.GetMouseButtonDown(0))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(hit.collider.gameObject.TryGetComponent<IInteractible>(out var interactible))
-            {
+        Debug.Log("Click!");
+
+        if(Physics.Raycast(_camera.transform.position , _camera.transform.forward , out RaycastHit hit, _interactDistance))
+         {
+             if(hit.collider.gameObject.TryGetComponent<IInteractible>(out var interactible))
+             {
                 Debug.Log(hit.collider.gameObject.name);
                 
 
                 interactible.Interact();
-            }
-            else
-            {
-                Debug.Log("NO!");
+             }
+             else
+                {
+                    Debug.Log("NO!");
+                }
             }
         }
     }
+        
 }
