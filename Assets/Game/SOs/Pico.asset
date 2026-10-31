@@ -15,3 +15,4 @@ MonoBehaviour:
   pickupName: Pico
   pickupPrompt: Pickup Pico
   isIngredient: 0
+  Pr_pickup: {fileID: 6454223295416072289, guid: afaced8fb5ca62f4286216763ba853f6, type: 3}
