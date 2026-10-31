@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using DesignPatterns.CreationalPatterns;
 using EMILtools.Extensions;
 using UnityEditor;
 using UnityEngine;
@@ -9,10 +11,14 @@ public class Interactor : MonoBehaviour
     [SerializeField] public GameObject _camera;
     [SerializeField] public float _interactDistance = 5f;
     [SerializeField] TextMeshProUGUI _textbox;
+    public LayerMask interactionMask;
 
+    
+    public bool holdingDownMouse;
     public Action<Rigidbody> OnGrab;
     public Action OnStopInteraction;
-
+    
+    
     void Update()
     {
         CheckInteraction();
@@ -21,30 +27,65 @@ public class Interactor : MonoBehaviour
 
     void CheckInteraction()
     {
+        Debug.DrawRay(_camera.transform.position, _camera.transform.forward, Color.red);
+        _textbox.gameObject.SetActive(false);
+        if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit, _interactDistance, interactionMask))
+            return;
+        if (!hit.collider.gameObject.TryGetComponent<IInteractible>(out var interactible)) return;
+        var ctx = interactible.GetInteractionCtx();
+        
+        if(!holdingDownMouse) _textbox.gameObject.SetActive(true);
+        _textbox.SetText(ctx.interactionPrompt); //All Interactables Have interaction prompts, all interactables get it from different places
+        
         if (!Input.GetMouseButtonDown(0)) return;
         
-        Debug.Log("Click!");
-
-        if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out RaycastHit hit, _interactDistance)) return;
+        holdingDownMouse = true;
         
-        if(hit.collider.gameObject.TryGetComponent<IInteractible>(out var interactible))
+        switch (interactible) //All interactables have different mutations
         {
-            Debug.Log(hit.collider.gameObject.name);
-            _textbox.gameObject.SetActive(true);
-            _textbox.SetText("E to interact with: " );
-            
-            var ctx = interactible.Interact();
-            if (ctx._itemSOData._objectType == ItemSO.ObjectType.Pickup)
-                OnGrab?.Invoke(ctx._rb);
+            case Pickup pickup: 
+                OnGrab?.Invoke(pickup._rb);
+                pickup._rb.ResetVel3D();
+                break;
+            case Cookware cookware:  
+                
+                break;
         }
-        else
-            Debug.Log("NO!");
     }
 
     void CheckStopInteraction()
     {
         if(!Input.GetMouseButtonUp(0)) return;
+        holdingDownMouse = false;
         OnStopInteraction?.Invoke();
     }
         
 }
+
+
+
+public class OrderTracker : Singleton<OrderTracker>
+{
+    [Serializable]
+    public class Order
+    {
+        public Action OnFinishOrder;
+        public string name;
+        public bool complete;
+    }
+
+    public List<Order> orders;
+
+    public void FinishOrder(string orderName)
+    {
+        // for logan: make foreach loop that calls .Invoke() on the order
+        // then mark the order as complete
+        
+        
+        
+        
+        // end
+    }
+
+}
+

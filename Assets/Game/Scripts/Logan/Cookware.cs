@@ -1,16 +1,15 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static IInteractible;
 
 
 public class Cookware : MonoBehaviour, IInteractible
 {
-  [SerializeField] TextMeshProUGUI _textbox;
-    public IInteractible.ItemContext Interact()
+    [SerializeField] CookwareSO _cookwareSO;
+    public InteractionEventCtx GetInteractionCtx() => new()
     {
-      IInteractible.ItemContext _itemContext = new();
-      Debug.Log("cookware");
-      _textbox.SetText("E to interact with: " + "cookware");
-      return _itemContext;
-    }
+        _gameObject = gameObject,
+        interactionPrompt = _cookwareSO.cookwarePrompt,
+    };
 }

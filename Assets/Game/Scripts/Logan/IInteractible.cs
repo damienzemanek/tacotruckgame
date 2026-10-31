@@ -1,14 +1,15 @@
 using System;
 using UnityEngine;
 
+[Serializable]
+public struct InteractionEventCtx
+{
+    public GameObject _gameObject;
+    public string interactionPrompt;
+}
+
 public interface IInteractible
 {
-    [Serializable]
-    public struct ItemContext
-    {
-        public GameObject _gameObject;
-        public Rigidbody _rb;
-        public ItemSO _itemSOData;
-    }
-    ItemContext Interact();
-} 
+    InteractionEventCtx GetInteractionCtx();
+}
+

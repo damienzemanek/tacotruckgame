@@ -1,13 +1,12 @@
 using UnityEngine;
 
-public class Pickup : Item
+public class Pickup : MonoBehaviour, IInteractible
 {
+    public PickupSO _pickupSO;
     public Rigidbody _rb;
-    public override IInteractible.ItemContext Interact()
+    public InteractionEventCtx GetInteractionCtx() => new()
     {
-        var ctx = base.Interact();
-        Debug.Log("Pickup");
-        ctx._rb = _rb;
-        return ctx;
-    }
+        _gameObject = gameObject,
+        interactionPrompt = _pickupSO.pickupPrompt,
+    };
 }
