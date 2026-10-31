@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using EMILtools.Core;
+using UnityEngine;
 
 namespace EMILtools.Systems
 {
@@ -32,9 +34,24 @@ namespace EMILtools.Systems
         [NonSerialized] readonly List<ISubscriber> subs = new();
         [NonSerialized] readonly List<ISubscriber> snapshot = new();
         public IReadOnlyList<ISubscriber> API_Snapshot => snapshot;
+        
+        
         // ---------- Typed Generic --------------
-        public ISubscriber Add(ISubscriber cb) { subs.Add(cb); return cb; }
-        public ISubscriber Remove(ISubscriber cb) { subs.Remove(cb); return cb; }
+        public ISubscriber Add([NotNull] ISubscriber cb)
+        {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
+            subs.Add(cb);
+            return cb;
+        }
+
+        public ISubscriber Remove([NotNull] ISubscriber cb)
+        {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
+            subs.Remove(cb);
+            return cb;
+        }
+        
+        
         public Task Publish() => ((IPublisher)this).PublishCore();
         public Task PublishImplementation(ISubscriber sub) => sub.Execute();
         
@@ -43,6 +60,9 @@ namespace EMILtools.Systems
         {
             snapshot.Clear();
             snapshot.AddRange(subs);
+                
+            Debug.Log($"[Publisher] Snapshot contains {snapshot.Count} subscribers");
+
         }
     }
 
@@ -60,25 +80,44 @@ namespace EMILtools.Systems
         [NonSerialized] TContext cachedContext;
 
         // ---------- Typed Generic --------------
-        public ISubscriber<TContext> Add(ISubscriber<TContext> cb) { subs.Add(cb); return cb; }
-        public ISubscriber<TContext> Remove(ISubscriber<TContext> cb) { subs.Remove(cb); return cb; }
-
-        public ISubscriber Add(ISubscriber cb)
+        public ISubscriber<TContext> Add([NotNull] ISubscriber<TContext> cb)
         {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
+            subs.Add(cb); 
+            return cb;
+        }
+
+        public ISubscriber<TContext> Remove([NotNull] ISubscriber<TContext> cb)
+        {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
+            subs.Remove(cb); 
+            return cb;
+        }
+
+        
+        
+        public ISubscriber Add([NotNull] ISubscriber cb)
+        {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
             if(cb is ISubscriber<TContext> typedCB) return ((IDelegatorAbstract<ISubscriber<TContext>>)this).Add(typedCB);
             throw SubscriberTypeError(cb, "added");
         }
 
-        public ISubscriber Remove(ISubscriber cb)
+        public ISubscriber Remove([NotNull] ISubscriber cb)
         {
+            if(cb == null) throw new ArgumentNullException(nameof(cb));
             if (cb is ISubscriber<TContext> typed)
                 return ((IDelegatorAbstract<ISubscriber<TContext>>)this).Remove(typed);
 
             throw SubscriberTypeError(cb, "removed");
         }
+        
+        
 
         public Task PublishImplementation(ISubscriber sub)
         {
+            Debug.Log($"[Publisher] Executing subscriber: {sub}");
+
             if (sub is ISubscriber<TContext> subTyped)
                 return subTyped.Execute(cachedContext);
 

@@ -11,10 +11,7 @@ public class PlayerController : MonoBehaviour
     public CharacterController charController;
     public Transform camTransform;
 
-    private void Awake()
-    {
-        CursorEX.Set(false, Locked);
-    }
+    void Awake() => CursorEX.Set(false, Locked);
 
     public void Update()
     {

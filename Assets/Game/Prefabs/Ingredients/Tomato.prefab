@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
   pickup: {fileID: 3447309083559887074}
+  outcomeDetermined: 0
 --- !u!33 &2337320441882920945
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,7 +98,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7099fabfda0e6b245acdcebe58b0af4e, type: 2}
+  - {fileID: 2100000, guid: 94e0d145fcdae654f8cef8583086702d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

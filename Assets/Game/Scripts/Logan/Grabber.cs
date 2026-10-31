@@ -1,4 +1,5 @@
 using System;
+using EMILtools.Systems;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -6,40 +7,30 @@ public class Grabber : MonoBehaviour
 {
     [Required] public Interactor interactor;
     [Required] public FixedJoint joint;
-    public Rigidbody rb;
-
+    [ReadOnly] public Rigidbody grabbedRb;
     public float breakVal = 4;
 
-    void OnEnable()
-    {
-        interactor.OnGrab += Grab;
-        interactor.OnStopInteraction += StopGrab;
-    }
-
-    void OnDisable()
-    {
-        interactor.OnGrab -= Grab;
-        interactor.OnStopInteraction -= StopGrab;
-    }
     
-    void Grab(Rigidbody rigidbody)
+    public void Grab(Rigidbody rigidbody)
     {
         Debug.Log("Grabbed : " + rigidbody.name + "");
         joint.connectedBody = rigidbody;   
-        rb = rigidbody;
+        grabbedRb = rigidbody;
     }
 
-    void StopGrab()
+    public void StopGrab()
     {
+        if (grabbedRb == null) return;
+        
         joint.connectedBody = null;
-        if (rb != null) rb.isKinematic = false;
-        rb = null;
+        if (grabbedRb != null) grabbedRb.isKinematic = false;
+        grabbedRb = null;
     }
 
     void OnJointBreak(float breakForce)
     {
-        if (rb != null) rb.isKinematic = false;
-        rb = null;
+        if (grabbedRb != null) grabbedRb.isKinematic = false;
+        grabbedRb = null;
         joint = gameObject.AddComponent<FixedJoint>();
         joint.breakForce = breakVal;
         joint.breakTorque = breakVal;

@@ -311,4 +311,26 @@ public class PublisherTests
 
         Assert.IsTrue(secondCalled, "Second subscriber should run after next publish cycle.");
     }
+    
+    [Test]
+    public void Test14_AddNullSubscriberThrows()
+    {
+        var publisher = new Publisher();
+        var genericPublisher = new Publisher<MyContext>();
+
+        Assert.Throws<ArgumentNullException>(() => publisher.Add((ISubscriber)null));
+        Assert.Throws<ArgumentNullException>(() => genericPublisher.Add((ISubscriber)null));
+        Assert.Throws<ArgumentNullException>(() => genericPublisher.Add((ISubscriber<MyContext>)null));
+    }
+
+    [Test]
+    public void Test15_RemoveNullSubscriberThrows()
+    {
+        var publisher = new Publisher();
+        var genericPublisher = new Publisher<MyContext>();
+
+        Assert.Throws<ArgumentNullException>(() => publisher.Remove((ISubscriber)null));
+        Assert.Throws<ArgumentNullException>(() => genericPublisher.Remove((ISubscriber)null));
+        Assert.Throws<ArgumentNullException>(() => genericPublisher.Remove((ISubscriber<MyContext>)null));
+    }
 }
