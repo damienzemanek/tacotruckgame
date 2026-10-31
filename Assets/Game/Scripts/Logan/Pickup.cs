@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class Pickup : Item
 {
+    public Rigidbody _rb;
     public override IInteractible.ItemContext Interact()
     {
-        _itemContext._rb = gameObject.GetComponent<Rigidbody>();
-        return base.Interact();
+        var ctx = base.Interact();
+        ctx._rb = _rb;
+        return ctx;
     }
 }

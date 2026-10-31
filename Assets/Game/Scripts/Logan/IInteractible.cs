@@ -4,7 +4,7 @@ using UnityEngine;
 public interface IInteractible
 {
 [Serializable]
-    public struct ItemContext
+    public class ItemContext
     {
         public GameObject _gameObject;
         public Rigidbody _rb;
@@ -13,12 +13,3 @@ public interface IInteractible
     }
     ItemContext Interact();
 } 
-public class ItemSO : ScriptableObject
-{
-    public enum ObjectType
-    {
-    Cookware,
-    Pickup   
-    }
-    public ObjectType _objectType;
-}
