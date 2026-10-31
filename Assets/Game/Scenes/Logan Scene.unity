@@ -713,7 +713,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5f1063c9086cd4592e4a6f9e730bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  _textbox: {fileID: 1225566128}
 --- !u!1 &2106052521
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,6 +865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interaction_Script
   _camera: {fileID: 2106052521}
   _interactDistance: 7.9
+  _textbox: {fileID: 1225566128}
 --- !u!1 &2114511868
 GameObject:
   m_ObjectHideFlags: 0

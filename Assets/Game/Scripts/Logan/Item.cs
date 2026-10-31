@@ -3,10 +3,13 @@ using TMPro;
 
 public class Item : MonoBehaviour, IInteractible
 {
+    [SerializeField] public IInteractible.ItemContext _itemContext;
     //[SerializeField] TextMeshProUGUI _textbox;
-    void IInteractible.Interact()
+    public virtual IInteractible.ItemContext Interact()
     {
-      Debug.Log("item");
-       //_textbox.SetText("E to interact with: " + "item");
+    IInteractible.ItemContext _itemContext = new();
+      _itemContext._gameObject = gameObject;
+     // _itemContext._rb = gameObject.GetComponent<Rigidbody>();
+        return _itemContext;
     }
 }
