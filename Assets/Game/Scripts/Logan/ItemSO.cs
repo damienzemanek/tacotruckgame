@@ -5,8 +5,8 @@ public class ItemSO : ScriptableObject
 {
     public enum ObjectType
     {
-    Cookware,
-    Pickup   
+        Cookware,
+        Pickup   
     }
     public ObjectType _objectType;
 }

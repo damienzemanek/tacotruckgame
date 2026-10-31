@@ -399,10 +399,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0229263851d8ade4ba467677491548eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
-  _itemContext:
-    _gameObject: {fileID: 592400675}
-    _rb: {fileID: 592400676}
-    _itemSOData: {fileID: 11400000, guid: 0283267e2aaade147a2073deb5d9f650, type: 2}
+  _itemSO: {fileID: 11400000, guid: 0283267e2aaade147a2073deb5d9f650, type: 2}
+  _rb: {fileID: 592400676}
 --- !u!1 &1010879333
 GameObject:
   m_ObjectHideFlags: 0

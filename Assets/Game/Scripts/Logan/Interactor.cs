@@ -30,10 +30,10 @@ public class Interactor : MonoBehaviour
         if(hit.collider.gameObject.TryGetComponent<IInteractible>(out var interactible))
         {
             Debug.Log(hit.collider.gameObject.name);
-            var ctx =interactible.Interact();
             _textbox.gameObject.SetActive(true);
             _textbox.SetText("E to interact with: " );
             
+            var ctx = interactible.Interact();
             if (ctx._itemSOData._objectType == ItemSO.ObjectType.Pickup)
                 OnGrab?.Invoke(ctx._rb);
         }
