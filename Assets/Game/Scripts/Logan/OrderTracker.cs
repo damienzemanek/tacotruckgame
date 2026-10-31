@@ -24,9 +24,16 @@ public class OrderTracker : Singleton<OrderTracker>
         
         foreach(Order order in orders)
         {
+            if(order.name == orderName)
+            {
             order.OnFinishOrder?.Invoke();
             Debug.Log(order);
             order.complete = true;
+            }
+            else
+            {
+                return;
+            }
         }
         
         
