@@ -80,8 +80,15 @@ public class OrderTracker : Singleton<OrderTracker>
     {
         // for logan: make foreach loop that calls .Invoke() on the order
         // then mark the order as complete
+
+        // for damien: Thank you for providing more context, I think I did what you asked within the code, but I might have followed it to stringently. Please message me if you need changed to be made.
         
-        
+        foreach(Order order in orders)
+        {
+           order.OnFinishOrder?.Invoke();
+           Debug.Log(order);
+           order.complete = true;
+        }
         
         
         // end

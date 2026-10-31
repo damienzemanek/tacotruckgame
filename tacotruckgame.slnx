@@ -1,18 +1,21 @@
 ﻿<Solution>
   <Project Path="EMILtools.csproj" />
   <Project Path="SingularityGroup.HotReload.Editor.csproj" />
+  <Project Path="AYellowpaper.SerializedCollections.csproj" />
   <Project Path="ProTimers.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ProArchitecture.csproj" />
   <Project Path="ProTimersTests.csproj" />
   <Project Path="ProArchitectureTests.csproj" />
+  <Project Path="AYellowpaper.SerializedCollections.Editor.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="StateBufferedTesting.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="MonoFacadeTesting.csproj" />
   <Project Path="PublisherTesting.csproj" />
   <Project Path="ProSM.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="PipelineTests.csproj" />
   <Project Path="UXUI.csproj" />
   <Project Path="Tests.csproj" />
@@ -20,6 +23,5 @@
   <Project Path="ProSMTests.csproj" />
   <Project Path="SubscriberTests.csproj" />
   <Project Path="SettableTemplateTestings.csproj" />
-  <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="MonoFacadeTests.csproj" />
 </Solution>
