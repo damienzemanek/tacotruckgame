@@ -44,7 +44,7 @@ public sealed class MeatGrinder : Cookware
         Debug.Log("Meat Grinder: Started using");
         base.OnInteract(ctx);
         isMouseHeldAndMeatIsGrinding = true;
-        if(!hasMeatAlready) cookwareProgressSlider.gameObject.SetActive(false);
+        cookwareProgressSlider.gameObject.SetActive(hasMeatAlready);
         return true;
     }
 
@@ -52,6 +52,7 @@ public sealed class MeatGrinder : Cookware
     {
         Debug.Log("Meat Grinder: Stopped using");
         isMouseHeldAndMeatIsGrinding = false;
+        cookwareProgressSlider.gameObject.SetActive(false);
         return base.OnStopInteract(ctx);
     }
     

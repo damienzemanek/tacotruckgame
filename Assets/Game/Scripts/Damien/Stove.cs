@@ -1,55 +1,61 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+
+/// <summary>
+/// THIS IS PUT ON THE STOVE BUTTON TO START THE STOVE
+/// </summary>
 public class Stove : Cookware
 {
-    public CookwareIngredientCombinationLoc stopButton;
+    [Required] public Transform stoveReparentPos;
+    [Required] public GameObject itemOnStove;
+    [Required] public CookwareIngredientCombinationLoc stoveEntryLoc;
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
     public float cookSpeed = 0.02f;
-    public GameObject 
-    public bool isCookingAlready;
+    public bool isCooking;
+    public bool hasItemOnStove;
     public bool resetting;
-
-    protected override void Awake()
+    
+    public void StartStove()
     {
-        meatEntryLoc.onHasAllIngredients += PutMeatOnStove;
-        base.Awake();
+        isCooking = true;
+        if(hasItemOnStove && !resetting)
+            cookwareProgressSlider.gameObject.SetActive(true);
+    }
+
+    public void StopStove()
+    {
+        isCooking = false;
+        cookwareProgressSlider.gameObject.SetActive(false);
     }
     
-    public void PutMeatOnStove()
+    public void PutItemOnStove(GameObject item)
     {
         if (resetting) return;
+        item.transform.SetParent(stoveReparentPos);
+        item.transform.localPosition = Vector3.zero;
+        item.transform.localRotation = Quaternion.identity;
+        itemOnStove = item;
+        hasItemOnStove = true;
         Debug.Log("Meat Grinder: Put meat in grinder");
     }
     
     public void StopResetTime() => resetting = false;
     
-
-    // Meat Grinder: GRINDS THE MEAT
-    // CALLED IN FIXED TIME POLL
+    
     void FixedUpdate()
     {
-        if (!hasMeatAlready) return;
-        if (!isMouseHeldAndMeatIsGrinding) return;
-        if (resetting) return;
-        ProgressCookware(-meatUsageSpeed);
-        Debug.Log("Meat Grinder: Meat Remaining: " + cookwareProgress);
+        // For logan: Progress the cookware, if the stove is cookijng, has an item, and is not resseting,
+        // it it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
+
+        
     }
 
     public override bool OnInteract(InteractionEventCtx ctx)
     {
-        Debug.Log("Meat Grinder: Started using");
         base.OnInteract(ctx);
-        isMouseHeldAndMeatIsGrinding = true;
-        if(!hasMeatAlready) cookwareProgressSlider.gameObject.SetActive(false);
+        StartStove();
         return true;
-    }
-
-    public override bool OnStopInteract(InteractionEventCtx ctx)
-    {
-        Debug.Log("Meat Grinder: Stopped using");
-        isMouseHeldAndMeatIsGrinding = false;
-        return base.OnStopInteract(ctx);
     }
     
 
@@ -57,11 +63,12 @@ public class Stove : Cookware
     {
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
-        isMouseHeldAndMeatIsGrinding = false;
-        meatEntryLoc.SetPreventIngredientEntries(false);
-        hasMeatAlready = false;
-        meatEntryLoc.ResetProgress();
-        meatEntryLoc.hasAllIngredients = false;
+        itemOnStove = null;
+        hasItemOnStove = false;
+        isCooking = false;
+        stoveEntryLoc.ResetProgress();
+        stoveEntryLoc.hasAllIngredients = false;
+        
         resetting = true;
         Invoke(nameof(StopResetTime), 0.5f);
         Debug.Log("Meat Grinder: Produced meat");

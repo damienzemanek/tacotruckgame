@@ -32,15 +32,7 @@ public abstract class Cookware : Interactible
     {
         //Debug.Log("[COOKWARE]: OnInteract Called");
         base.OnInteract(ctx);
-        cookwareProgressSlider.gameObject.SetActive(true);
         return true;
-    }
-
-    public override bool OnStopInteract(InteractionEventCtx ctx)
-    {
-        //Debug.Log("[COOKWARE]: OnStopInteract Called");
-        cookwareProgressSlider.gameObject.SetActive(false);
-        return base.OnStopInteract(ctx);
     }
     
     public void ResetProgress() => cookwareProgressSlider.value = 1f;
