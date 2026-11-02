@@ -1,15 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
-public class MeatGrinder : Cookware
+public sealed class MeatGrinder : Cookware
 {
     public CookwareIngredientCombinationLoc meatEntryLoc;
-    const float MEAT_AMOUNT = 100;
-    public float meatUsageSpeed = 1f;
+    public float meatUsageSpeed = 0.02f;
     public bool hasMeatAlready;
     public bool isMouseHeldAndMeatIsGrinding;
     public bool resetting;
-    [Range(0, 100)] public float currentRemainingMeatAmount;
 
     protected override void Awake()
     {
@@ -20,7 +18,7 @@ public class MeatGrinder : Cookware
     public void PutMeatInGrinder()
     {
         if (resetting) return;
-        currentRemainingMeatAmount = MEAT_AMOUNT;
+        ResetProgress();
         hasMeatAlready = true;
         meatEntryLoc.hasAllIngredients = false;
         meatEntryLoc.SetPreventIngredientEntries(true);
@@ -36,16 +34,18 @@ public class MeatGrinder : Cookware
     {
         if (!hasMeatAlready) return;
         if (!isMouseHeldAndMeatIsGrinding) return;
-        currentRemainingMeatAmount -= meatUsageSpeed * Time.deltaTime;
-        Debug.Log("Meat Grinder: Meat Remaining: " + currentRemainingMeatAmount);
-        if(currentRemainingMeatAmount <= 0) ProduceOutcome();
+        if (resetting) return;
+        ProgressCookware(-meatUsageSpeed);
+        Debug.Log("Meat Grinder: Meat Remaining: " + cookwareProgress);
     }
 
     public override bool OnInteract(InteractionEventCtx ctx)
     {
         Debug.Log("Meat Grinder: Started using");
+        base.OnInteract(ctx);
         isMouseHeldAndMeatIsGrinding = true;
-        return base.OnInteract(ctx);
+        if(!hasMeatAlready) cookwareProgressSlider.gameObject.SetActive(false);
+        return true;
     }
 
     public override bool OnStopInteract(InteractionEventCtx ctx)
@@ -59,7 +59,7 @@ public class MeatGrinder : Cookware
     public override void ProduceOutcome()
     {
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
-        currentRemainingMeatAmount = 0;
+        ResetProgress();
         isMouseHeldAndMeatIsGrinding = false;
         meatEntryLoc.SetPreventIngredientEntries(false);
         hasMeatAlready = false;

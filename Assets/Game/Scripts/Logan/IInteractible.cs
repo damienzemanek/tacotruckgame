@@ -25,14 +25,14 @@ public abstract class Interactible : MonoBehaviour
 
     public virtual bool OnInteract(InteractionEventCtx ctx)
     {
-        Debug.Log("[INTERACTABLE] OnInteract");
+        //Debug.Log("[INTERACTABLE] OnInteract");
         return true;
     }
     
     public virtual bool OnStopInteract(InteractionEventCtx ctx)
     {
         // unsubscribes
-        Debug.Log("[INTERACTABLE] OnStopInteract");
+        //Debug.Log("[INTERACTABLE] OnStopInteract");
         ctx._interactor.OnStartInteraction.Remove(SubOnInteract);
         ctx._interactor.OnStopInteraction.Remove(SubOnStopInteract);
         return true;

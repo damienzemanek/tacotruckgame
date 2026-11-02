@@ -1,5 +1,6 @@
 using System;
 using EMILtools.Systems;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,9 +8,11 @@ using UnityEngine.UI;
 
 public abstract class Cookware : Interactible
 {
-    [SerializeField] protected Transform cookwareOutcomeCreationPosition;
-    [SerializeField] protected PickupSO cookwareOutcome;
-    [SerializeField] public CookwareSO _cookwareSO;
+    [ReadOnly] public float cookwareProgress => cookwareProgressSlider.value;
+    [SerializeField, Required] public SliderWorld cookwareProgressSlider;
+    [SerializeField, Required] protected Transform cookwareOutcomeCreationPosition;
+    [SerializeField, Required] protected PickupSO cookwareOutcome;
+    [SerializeField, Required] public CookwareSO _cookwareSO;
     
     public override InteractionEventCtx GetInteractionCtx(Interactor withInteractor) => new()
     {
@@ -17,11 +20,37 @@ public abstract class Cookware : Interactible
         interactionPrompt = _cookwareSO.cookwarePrompt,
         _interactor = withInteractor,
     };
+    
+    protected override void Awake()
+    {
+        base.Awake(); 
+        ResetProgress();
+        cookwareProgressSlider.gameObject.SetActive(false);
+    }
 
     public override bool OnInteract(InteractionEventCtx ctx)
     {
-        Debug.Log("[COOKWARE]: OnInteract Called");
-        return base.OnInteract(ctx);
+        //Debug.Log("[COOKWARE]: OnInteract Called");
+        base.OnInteract(ctx);
+        cookwareProgressSlider.gameObject.SetActive(true);
+        return true;
+    }
+
+    public override bool OnStopInteract(InteractionEventCtx ctx)
+    {
+        //Debug.Log("[COOKWARE]: OnStopInteract Called");
+        cookwareProgressSlider.gameObject.SetActive(false);
+        return base.OnStopInteract(ctx);
+    }
+    
+    public void ResetProgress() => cookwareProgressSlider.value = 1f;
+    
+    public bool ProgressCookware(float progressAmount)
+    {
+        cookwareProgressSlider.MutateValue(progressAmount);
+        if (!cookwareProgressSlider.IsEmpty) return false;
+        ProduceOutcome();
+        return true;
     }
     
     public abstract void ProduceOutcome(); // All cookware will have an outcome associated with their usage
