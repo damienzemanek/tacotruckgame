@@ -6,7 +6,15 @@
 Put your group check-in Devlog here.
 
 ### Damien Zemanek
-Put your individual check-in Devlog here.
+10/5/2026
+What I contributed to the project at this stage: 
+
+
+My proposal has been utilized so far to help me reference what I need to do so I dont have to memorize too many things and I can focus on programming the systems.
+
+Reflection Q Responses:
+- Our project proposal was very detailed and served as a good baseline, but pretty soon after I made significant changes that made it out of date. I ended of modyfing the structure of the abstracts to remove uneccessary stuff and centralize more. For example `IInteractable` was changed to `abstract Interactable` which inherits from Monobehaviour. There was too much template behaviour I was seeing on the `interface` so I refactored it as a class.
+- Our tool-load is basically the same, but I have started to use my custom Pub/Sub system in my custom C# Library called `EMILTools`. It allows me to get around delegates being immutable and acting like valuetypes when I change them. That way I can unsubscribe to an eventhandler inside subscriber's event call which will modify the original location. This would be impossible with regular delegate types. I needed to do this for part of the `CookwareIngredientCombinationLoc` implementation's `OnHasAllIngredients` in order to alert the `Cookware` that it can be used.
 
 ### Logan Kane
 
