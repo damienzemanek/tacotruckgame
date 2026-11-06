@@ -147,6 +147,7 @@ Cite any open-source assets here. Put them in a LIST, and use correctly formatte
 - [Pico Image](https://stock.adobe.com/ch_fr/images/bowl-of-tasty-pico-de-gallo-salsa-on-white-background/439779240)
 - [Tomato Image](https://www.istockphoto.com/photos/tomato)
 - [Knife Img](https://www.istockphoto.com/photos/knife)
-- [Ground Beef Cooked Img](https://www.recipevibes.com/how-to-cook-ground-beef/)Ground Beef Img
+- [Ground Beef Cooked Img](https://www.recipevibes.com/how-to-cook-ground-beef/)
+- [Ground Beef Img](https://hare-today.com/product/raw_ground/boneless_ground_beef_)
 - [Beef Img](https://hare-today.com/product/raw_ground/boneless_ground_beef_)
 - [Burnt Food](https://www.linkedin.com/pulse/frequently-burned-food-restaurant-kitchens-michael-niksic/)
