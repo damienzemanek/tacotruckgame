@@ -45,8 +45,11 @@ public class Stove : Cookware
     
     void FixedUpdate()
     {
+                 
         // For logan: Progress the cookware, if the stove is cooking, has an item, and is not resseting,
         // it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
+        if(!stoveEntryLoc.hasAllIngredients) return;
+        PutItemOnStove(itemOnStove);
         if (!hasItemOnStove) return;
         if (!isCooking) return;
         if (resetting) return;

@@ -173,9 +173,6 @@ MonoBehaviour:
   - ingredient: {fileID: 11400000, guid: cf88071049e8ced46be8ea94fbd95535, type: 2}
     ingredientGO: {fileID: 0}
     hasIngredient: 0
-  - ingredient: {fileID: 11400000, guid: 44f53677c09846146ba4a29bd26f6adb, type: 2}
-    ingredientGO: {fileID: 0}
-    hasIngredient: 0
 --- !u!65 &34740920
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1431,7 +1428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270ebef68ab86d449ad69248d52f3f3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grabber
-  interactor: {fileID: 2449774808612560913}
   joint: {fileID: 1010879337}
   grabbedRb: {fileID: 0}
   breakVal: 20
