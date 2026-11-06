@@ -4,7 +4,7 @@
 ## Check-In Milestone 1 - Nov 5
 ### Group Report
 Put your group check-in Devlog here.
-Breakpoints Usage: When I (Damien) was refactoring the `Interactor` to work with the `Pickup` script I was running into a `NullReferenceException,` Originally I had though the NRE was caused by something I did to the `InteractEventCtx`. I used Breakpoints to debug specifically the `InteractEventCtx`'s member variables right before the `OnGrab` event invoke. (This was before Pub/Sub implementation). I was able to use Breakpoints to identify that all 3 member variables were `null` at this state. This informed me that the error was further up the stack trace and I had to go further toward the source. I stack traced the error all the way back into Unity and found that it was an unassigned refernce in the `Pickup` that I needed to assign which was causing the error.
+- Breakpoints Usage: When I (Damien) was refactoring the `Interactor` to work with the `Pickup` script I was running into a `NullReferenceException,` Originally I had though the NRE was caused by something I did to the `InteractEventCtx`. I used Breakpoints to debug specifically the `InteractEventCtx`'s member variables right before the `OnGrab` event invoke. (This was before Pub/Sub implementation). I was able to use Breakpoints to identify that all 3 member variables were `null` at this state. This informed me that the error was further up the stack trace and I had to go further toward the source. I stack traced the error all the way back into Unity and found that it was an unassigned refernce in the `Pickup` that I needed to assign which was causing the error.
 
 ### Damien Zemanek
 10/5/2026
