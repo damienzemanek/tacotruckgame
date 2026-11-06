@@ -37,7 +37,7 @@ public class Stove : Cookware
         item.transform.localRotation = Quaternion.identity;
         itemOnStove = item;
         hasItemOnStove = true;
-        Debug.Log("Meat Grinder: Put meat in grinder");
+        Debug.Log("Put Item On");
     }
     
     public void StopResetTime() => resetting = false;
@@ -45,9 +45,22 @@ public class Stove : Cookware
     
     void FixedUpdate()
     {
-        // For logan: Progress the cookware, if the stove is cookijng, has an item, and is not resseting,
-        // it it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
-
+        // For logan: Progress the cookware, if the stove is cooking, has an item, and is not resseting,
+        // it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
+        if (!hasItemOnStove) return;
+        if (!isCooking) return;
+        if (resetting) return;
+        ProgressCookware(-cookSpeed);
+        Debug.Log("Stove: Time Remaining: " + cookwareProgress);
+        if (itemOnStove == cookwareOutcome.Pr_pickup)
+        {
+            cookwareOutcome = burntFoodOutcome;
+            ProgressCookware(-cookSpeed);
+        }
+        else
+        {
+            ProgressCookware(-cookSpeed);
+        }
         
     }
 
@@ -57,10 +70,10 @@ public class Stove : Cookware
         StartStove();
         return true;
     }
-    
 
     public override void ProduceOutcome()
     {
+  
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
         itemOnStove = null;
