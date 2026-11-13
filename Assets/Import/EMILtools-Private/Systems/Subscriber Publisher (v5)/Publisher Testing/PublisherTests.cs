@@ -6,13 +6,14 @@ using EMILtools.Systems;
 using NUnit.Framework;
 using EMILtools.Systems;
 using EMILtools.Timers;
+using UnityEngine;
 
 public class PublisherTests
 {
     [Test]
     public void Test1_Initializes()
     {
-        var sub = new SubResolvable(Call);
+        var sub = new Sub(Call);
         var publisher = new Publisher();
 
         bool Call() => true;
@@ -24,7 +25,7 @@ public class PublisherTests
     public async Task Test2_CanPublish()
     {
         var called = false;
-        var sub = new SubResolvable(Call);
+        var sub = new Sub(Call);
         var publisher = new Publisher();
         publisher.Add(sub);
         await publisher.Publish();
@@ -39,7 +40,7 @@ public class PublisherTests
         bool called = false;
         bool Call() => called = true;
 
-        var sub = new SubResolvable(Call, isActive: false);
+        var sub = new Sub(Call, isActive: false);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -56,8 +57,8 @@ public class PublisherTests
         bool Call1() => called1 = true;
         bool Call2() => called2 = true;
 
-        var sub1 = new SubResolvable(Call1);
-        var sub2 = new SubResolvable(Call2);
+        var sub1 = new Sub(Call1);
+        var sub2 = new Sub(Call2);
 
         var publisher = new Publisher();
         publisher.Add(sub1);
@@ -79,7 +80,7 @@ public class PublisherTests
 
         bool MainCall() => mainCalled = true;
 
-        var sub = new SubResolvable(MainCall, container);
+        var sub = new Sub(MainCall, container);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -106,11 +107,11 @@ public class PublisherTests
         bool Call(MyContext c) => wasCalled = true;
         void ActionCall() => actionCalled = true;
         void Action2Call(MyContext c) => action2Called = true;
-        var sub = new SubResolvableCtx<MyContext>(
+        var sub = new Sub<MyContext>(
             Call,
             new Resolves(true,
                 beforeExe: new IResolvable[] { new Callback(ActionCall) },
-                afterExe: new IResolvable[] { new CallbackCtx<MyContext>(Action2Call) })
+                afterExe: new IResolvable[] { new Callback<MyContext>(Action2Call) })
             
         );
 
@@ -123,6 +124,39 @@ public class PublisherTests
         Assert.IsTrue(actionCalled);
         Assert.IsTrue(action2Called);
     }
+    
+    [Test]
+    public void PROTOTYPETEST_CallbackCtxRequiresContextInjection()
+    {
+        bool wasCalled = false;
+        bool actionCalled = false;
+
+        bool Call() => wasCalled = true;
+        void ActionCall() => actionCalled = true;
+        void Action2Call(MyContext c) { }
+
+        var sub = new Sub(
+            Call,
+            new Resolves(true,
+                beforeExe: new IResolvable[] { new Callback(ActionCall) },
+                afterExe: new IResolvable[] { new Callback<MyContext>(Action2Call) })
+        );
+
+        var publisher = new Publisher();
+        publisher.Add(sub);
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await publisher.Publish()
+        );
+
+        Assert.AreEqual(
+            "Context not injected. Are you using Callback<TCtx> with a regular Publisher instead of Publisher<TCtx>?",
+            exception.Message
+        );
+
+        Assert.IsTrue(wasCalled);
+        Assert.IsTrue(actionCalled);
+    }
 
     [Test]
     public async Task Test7_CustomContextMultipleSubscribers()
@@ -133,8 +167,8 @@ public class PublisherTests
         bool Call1(MyContext c) => oneCalled = true;
         bool Call2(MyContext c) => twoCalled = true;
 
-        var sub1 = new SubResolvableCtx<MyContext>(Call1);
-        var sub2 = new SubResolvableCtx<MyContext>(Call2);
+        var sub1 = new Sub<MyContext>(Call1);
+        var sub2 = new Sub<MyContext>(Call2);
 
         var publisher = new Publisher<MyContext>();
         publisher.Add(sub1);
@@ -154,7 +188,7 @@ public class PublisherTests
         Func<bool> predicate = () => true; // returns true = short circuit
         void MainCall() => mainCalled = true;
 
-        var sub = new SubResolvable(predicate, canShortCircuit: true);
+        var sub = new Sub(predicate, canShortCircuit: true);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -171,12 +205,12 @@ public class PublisherTests
         Func<bool> predicate = () => false; // returns false = do not short circuit
         bool MainCall() => mainCalled = true;
 
-        var sub = new SubResolvable(predicate, canShortCircuit: true);
+        var sub = new Sub(predicate, canShortCircuit: true);
         var publisher = new Publisher();
         publisher.Add(sub);
 
         // Execute a second subscriber after predicate to simulate normal execution
-        var mainSub = new SubResolvable(MainCall);
+        var mainSub = new Sub(MainCall);
         publisher.Add(mainSub);
 
         await publisher.Publish();
@@ -197,7 +231,7 @@ public class PublisherTests
             afterExe: new IResolvable[] { new Callback(After) }
         );
 
-        var sub = new SubResolvable(ShortCircuitPredicate, container, canShortCircuit: true);
+        var sub = new Sub(ShortCircuitPredicate, container, canShortCircuit: true);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -223,7 +257,7 @@ public class PublisherTests
             beforeExe: new IResolvable[] { new Callback(Before) }
         );
 
-        var sub = new SubResolvable(Predicate, container, canShortCircuit: true);
+        var sub = new Sub(Predicate, container, canShortCircuit: true);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -253,7 +287,7 @@ public class PublisherTests
             beforeExe: new IResolvable[] { wait }
         );
 
-        var sub = new SubResolvable(Main, container);
+        var sub = new Sub(Main, container);
         var publisher = new Publisher();
         publisher.Add(sub);
 
@@ -285,7 +319,7 @@ public class PublisherTests
         {
             firstCalled = true;
 
-            publisher.Add(new SubResolvable(() =>
+            publisher.Add(new Sub(() =>
             {
                 secondCalled = true;
                 return false;
@@ -294,7 +328,7 @@ public class PublisherTests
             return false;
         }
 
-        publisher.Add(new SubResolvable(First));
+        publisher.Add(new Sub(First));
 
         var task1 = publisher.Publish();
 

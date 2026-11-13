@@ -19,7 +19,7 @@ namespace EMILtools.Systems
         protected UnboundFunctionality(TFacade facade) : base(facade)
         {
             var injectablePipeline = new InjectablePipeline<TViewCtx> ( injector: this, setupPipelineInOnePass:false);
-            exeSub = new SubResolvableCtx<TViewCtx>(ctx => { injectablePipeline.Execute(ctx); return false; });
+            exeSub = new Sub<TViewCtx>(ctx => { injectablePipeline.Execute(ctx); return false; });
         }
         public override void SetupModule() => Awake();
 
@@ -32,7 +32,7 @@ namespace EMILtools.Systems
 
         // ---------------------------------- PUB / SUB SYSTEM ----------------------------------
 
-        protected readonly SubResolvableCtx<TViewCtx> exeSub;    
+        protected readonly Sub<TViewCtx> exeSub;    
         public override ISubscriber Subscriber => exeSub;
         
         

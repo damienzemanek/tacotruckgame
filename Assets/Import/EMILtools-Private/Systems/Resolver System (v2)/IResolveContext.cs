@@ -23,16 +23,24 @@ namespace EMILtools.Systems
     /// <summary>
     /// Represents a callback mechanism that can be invoked before pipeline step execution
     /// </summary>
-    public class CallbackCtx<TCtx> : Resolvable, IContextInjectible<TCtx>
+    public class Callback<TCtx> : Resolvable, IContextInjectible<TCtx>
     {
         readonly Action<TCtx> action;
         [NonSerialized] TCtx cached;
-        public void InjectContext(TCtx ctx) => cached = ctx;
-        public CallbackCtx(Action<TCtx> action, bool executeOnce = false) : base(executeOnce)
+        bool isInjected = false;
+
+        public void InjectContext(TCtx ctx)
+        {
+            cached = ctx;
+            isInjected = true;
+        }
+        
+        public Callback(Action<TCtx> action, bool executeOnce = false) : base(executeOnce)
         {
             this.action = action;
             Resolve = () =>
             {
+                if (!isInjected) throw new InvalidOperationException("Context not injected. Are you using Callback<TCtx> with a regular Publisher instead of Publisher<TCtx>?");
                 action?.Invoke(cached);
                 return ContinueResolving;
             };

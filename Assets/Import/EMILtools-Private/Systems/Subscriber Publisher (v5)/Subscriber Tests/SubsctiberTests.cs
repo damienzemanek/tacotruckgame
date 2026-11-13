@@ -54,7 +54,7 @@ public class SubsctiberTests : MonoBehaviour
     {
         bool executed = false;
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => executed = true,
             new Resolves(true)
         );
@@ -73,7 +73,7 @@ public class SubsctiberTests : MonoBehaviour
             beforeExe: new IResolvable[] { before }
         );
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => false,
             container
         );
@@ -92,7 +92,7 @@ public class SubsctiberTests : MonoBehaviour
             afterExe: new IResolvable[] { after }
         );
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => false,
             container
         );
@@ -113,7 +113,7 @@ public class SubsctiberTests : MonoBehaviour
             beforeExe: new IResolvable[] { beforeFail }
         );
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => executed = true,
             container,
             canShortCircuit: true
@@ -137,7 +137,7 @@ public class SubsctiberTests : MonoBehaviour
             failExe: new IResolvable[] { failed }
         );
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => DoesContinue,
             container,
             canShortCircuit: true
@@ -161,7 +161,7 @@ public class SubsctiberTests : MonoBehaviour
             afterExe: new IResolvable[] { after }
         );
 
-        var sub = new SubResolvable(
+        var sub = new Sub(
             () => false,
             container,
             canShortCircuit: true

@@ -7,15 +7,22 @@ using UnityEngine;
 /// </summary>
 public class Stove : Cookware
 {
+    [ReadOnly] public GameObject itemOnStove;
     [Required] public Transform stoveReparentPos;
-    [Required] public GameObject itemOnStove;
     [Required] public CookwareIngredientCombinationLoc stoveEntryLoc;
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
     public float cookSpeed = 0.02f;
     public bool isCooking;
     public bool hasItemOnStove;
     public bool resetting;
-    
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        stoveEntryLoc.onHasAllIngredients += PutItemOnStove;
+    }
+
     public void StartStove()
     {
         isCooking = true;
@@ -29,12 +36,15 @@ public class Stove : Cookware
         cookwareProgressSlider.gameObject.SetActive(false);
     }
     
-    public void PutItemOnStove(GameObject item)
+    public void PutItemOnStove()
     {
         if (resetting) return;
+        var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
+        
         item.transform.SetParent(stoveReparentPos);
         item.transform.localPosition = Vector3.zero;
         item.transform.localRotation = Quaternion.identity;
+        
         itemOnStove = item;
         hasItemOnStove = true;
         Debug.Log("Meat Grinder: Put meat in grinder");
@@ -45,9 +55,10 @@ public class Stove : Cookware
     
     void FixedUpdate()
     {
-        // For logan: Progress the cookware, if the stove is cookijng, has an item, and is not resseting,
+        // For logan: Progress the cookware, if the stove is cooking, has an item, and is not resseting,
         // it it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
 
+        
         
     }
 
@@ -59,6 +70,7 @@ public class Stove : Cookware
     }
     
 
+    [Button]
     public override void ProduceOutcome()
     {
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);

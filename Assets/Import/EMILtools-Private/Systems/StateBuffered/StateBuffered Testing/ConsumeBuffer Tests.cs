@@ -25,7 +25,7 @@ public class ConsumeBufferTests
         bool consumed = false;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);
@@ -49,7 +49,7 @@ public class ConsumeBufferTests
         bool consumed = false;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => false, pub, 1f);
@@ -70,7 +70,7 @@ public class ConsumeBufferTests
         int received = 0;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);
@@ -95,7 +95,7 @@ public class ConsumeBufferTests
         int count = 0;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);
@@ -122,7 +122,7 @@ public class ConsumeBufferTests
         int received = 0;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);
@@ -150,7 +150,7 @@ public class ConsumeBufferTests
         bool consumed = false;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 0.5f);
@@ -175,7 +175,7 @@ public class ConsumeBufferTests
         int count = 0;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);
@@ -202,7 +202,7 @@ public class ConsumeBufferTests
         bool consumed = false;
 
         var pub = new Publisher<int>();
-        var sub = new SubResolvableCtx<int>(Consume);
+        var sub = new Sub<int>(Consume);
         pub.Add(sub);
 
         var buffer = new ConsumeBuffer<int>(() => condition, pub, 1f);

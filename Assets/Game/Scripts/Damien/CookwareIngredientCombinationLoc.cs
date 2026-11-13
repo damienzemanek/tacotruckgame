@@ -31,11 +31,11 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
         int index = Array.FindIndex(ingredientProgress, p => p.ingredient == ingredient.pickup._pickupSO);
         if (index == -1) return;
         ref IngredientCombinationProgression progress = ref ingredientProgress[index];
-        progress.hasIngredient = true;
         progress.ingredientGO = other.gameObject;
-        enteredIndiceCache.Add((other, index));
+        enteredIndiceCache.Add((other, index)); 
+        progress.hasIngredient = true;
+ 
         Debug.Log("Entered " + ingredient.pickup._pickupSO.name);
-        
         CheckHasAllIngredients();
     }
     
@@ -61,10 +61,10 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
         if (!ingredientProgress.All(p => p.hasIngredient)) return;
         if (hasAllIngredients) return;
         Debug.Log("Cookware Ingredient Combination Loc: Has all ingredients");
-        ConsumeConsumableIngredients();
-        ResetProgress();
         hasAllIngredients = true;
         onHasAllIngredients?.Invoke();
+        ConsumeConsumableIngredients();
+        ResetProgress();
     }
     
     public void SetPreventIngredientEntries(bool v) => preventIngredientEntries = v;

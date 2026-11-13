@@ -14,8 +14,8 @@ public abstract class Interactible : MonoBehaviour
 {
     public abstract InteractionEventCtx GetInteractionCtx(Interactor withInteractor);
     
-    public SubResolvableCtx<InteractionEventCtx> SubOnInteract;
-    public SubResolvableCtx<InteractionEventCtx> SubOnStopInteract;
+    public Sub<InteractionEventCtx> SubOnInteract;
+    public Sub<InteractionEventCtx> SubOnStopInteract;
 
     protected virtual void Awake()
     {

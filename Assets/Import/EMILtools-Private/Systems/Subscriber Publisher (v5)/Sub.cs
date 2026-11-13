@@ -5,7 +5,7 @@ using EMILtools.Core;
 
 namespace EMILtools.Systems
 {
-    public abstract class ResolveSubscriberBase : ISubscriber
+    public abstract class ResolvableSubscriberBase : ISubscriber
     {
         protected readonly Resolves ResolveContainer;
         
@@ -14,14 +14,14 @@ namespace EMILtools.Systems
         public bool isActive { get; set; }
         public abstract Task Execute();
         
-        protected ResolveSubscriberBase( bool isActive = true, bool canShortCircuit = false)
+        protected ResolvableSubscriberBase( bool isActive = true, bool canShortCircuit = false)
         {
             this.canShortCircuit = canShortCircuit;
             this.isActive = isActive;
             ResolveContainer = new Resolves(true);
         }
 
-        protected ResolveSubscriberBase( Resolves resolveContainer, bool isActive = true, bool canShortCircuit = false)
+        protected ResolvableSubscriberBase( Resolves resolveContainer, bool isActive = true, bool canShortCircuit = false)
         {
             ResolveContainer = resolveContainer;
             this.canShortCircuit = canShortCircuit;
@@ -48,19 +48,19 @@ namespace EMILtools.Systems
     /// <typeparam name="TDelegate"></typeparam>
     /// <typeparam name="TResolver"></typeparam>
     /// <typeparam name="TContext"></typeparam>
-    public sealed class SubResolvable : ResolveSubscriberBase, ISubscriber, ISubEditable<Func<bool>>
+    public sealed class Sub : ResolvableSubscriberBase, ISubscriber, ISubEditable<Func<bool>>
     {
         Func<bool> Callback;
         IPredicate Cb;
 
-        public SubResolvable(Func<bool> callback, bool isActive = true, bool canShortCircuit = false) : base(isActive,
+        public Sub(Func<bool> callback, bool isActive = true, bool canShortCircuit = false) : base(isActive,
             canShortCircuit)
         {
             Callback = callback;
             Cb = new FuncPredicate(callback);
         }
 
-        public SubResolvable(Func<bool> callback, Resolves resolveContainer, bool isActive = true,
+        public Sub(Func<bool> callback, Resolves resolveContainer, bool isActive = true,
             bool canShortCircuit = false) : base(resolveContainer, isActive, canShortCircuit)
         {
             Callback = callback;
@@ -86,22 +86,22 @@ namespace EMILtools.Systems
     /// <typeparam name="TDelegate"></typeparam>
     /// <typeparam name="TResolver"></typeparam>
     /// <typeparam name="TContext"></typeparam>
-    public sealed class SubResolvableCtx<TContext> : 
-        ResolveSubscriberBase, 
+    public sealed class Sub<TContext> : 
+        ResolvableSubscriberBase, 
         ISubscriber<TContext>,
         ISubEditable<Func<TContext, bool>>
     {
         Func<TContext, bool> Callback;
         IPredicate Cb;
 
-        public SubResolvableCtx(Func<TContext, bool> callback, bool isActive = true, bool canShortCircuit = false) :
+        public Sub(Func<TContext, bool> callback, bool isActive = true, bool canShortCircuit = false) :
             base(isActive, canShortCircuit)
         {
             Callback = callback;
             Cb = new FuncCtxPredicate<TContext>(callback);
         }
 
-        public SubResolvableCtx(Func<TContext, bool> callback, Resolves resolveContainer, bool isActive = true,
+        public Sub(Func<TContext, bool> callback, Resolves resolveContainer, bool isActive = true,
             bool canShortCircuit = false) : base(resolveContainer, isActive, canShortCircuit)
         {
             Callback = callback;

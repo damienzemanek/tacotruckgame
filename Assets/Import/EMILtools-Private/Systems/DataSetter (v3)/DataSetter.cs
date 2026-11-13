@@ -33,7 +33,7 @@ namespace EMILtools.Systems
         public void ExplicitSet(T1 val) => Get = val;
         
         // Template Call 
-        readonly SubResolvableCtx<T1> subscriber_TemplateCall;
+        readonly Sub<T1> subscriber_TemplateCall;
         public ISubscriber Subscriber => subscriber_TemplateCall;
         public PersistentAction OnSetEvent { get; set; } = new();
         bool _TemplateCall(T1 val)
@@ -46,7 +46,7 @@ namespace EMILtools.Systems
         }
         
         // Ctor
-        protected DataSetter() => subscriber_TemplateCall = new SubResolvableCtx<T1>(_TemplateCall);
+        protected DataSetter() => subscriber_TemplateCall = new Sub<T1>(_TemplateCall);
         
         // Action
         [NonSerialized] Publisher<T1> _publisher;
