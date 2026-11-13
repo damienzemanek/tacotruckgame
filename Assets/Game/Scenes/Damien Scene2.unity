@@ -1331,8 +1331,8 @@ MonoBehaviour:
   cookwareOutcomeCreationPosition: {fileID: 1111058914}
   cookwareOutcome: {fileID: 11400000, guid: 44f53677c09846146ba4a29bd26f6adb, type: 2}
   _cookwareSO: {fileID: 11400000, guid: 0c5fd7175f5682b4cb88b340394a94f6, type: 2}
-  stoveReparentPos: {fileID: 1407209693}
   itemOnStove: {fileID: 0}
+  stoveReparentPos: {fileID: 1407209693}
   stoveEntryLoc: {fileID: 34740919}
   burntFoodOutcome: {fileID: 11400000, guid: 661e24a8659d991459dffef4a4c61d70, type: 2}
   cookSpeed: 0.02
@@ -1625,7 +1625,7 @@ Transform:
   m_GameObject: {fileID: 1111058913}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.204, y: 1.244, z: -0.202}
+  m_LocalPosition: {x: 0.204, y: 1.412, z: -0.202}
   m_LocalScale: {x: 1.8508027, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1952,7 +1952,7 @@ Transform:
   m_GameObject: {fileID: 1407209692}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.076, y: 0.873, z: 0.417}
+  m_LocalPosition: {x: 0.139, y: 1.239, z: -0.248}
   m_LocalScale: {x: 1.8508027, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
