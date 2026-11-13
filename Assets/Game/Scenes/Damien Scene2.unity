@@ -1332,7 +1332,7 @@ MonoBehaviour:
   cookwareOutcome: {fileID: 11400000, guid: 44f53677c09846146ba4a29bd26f6adb, type: 2}
   _cookwareSO: {fileID: 11400000, guid: 0c5fd7175f5682b4cb88b340394a94f6, type: 2}
   stoveReparentPos: {fileID: 1407209693}
-  itemOnStove: {fileID: 6600772849571626856, guid: ec5685b024e995647b6dbc10b58074ed, type: 3}
+  itemOnStove: {fileID: 0}
   stoveEntryLoc: {fileID: 34740919}
   burntFoodOutcome: {fileID: 11400000, guid: 661e24a8659d991459dffef4a4c61d70, type: 2}
   cookSpeed: 0.02
