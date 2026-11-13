@@ -6,7 +6,6 @@ using UnityEngine;
 public class IngredientCombinationDb : ScriptableObject
 {
     
-    
     [Serializable]
     public class IngredientCombinationResult
     {

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Grabber : MonoBehaviour
 {
-    [Required] public Interactor interactor;
     [Required] public FixedJoint joint;
     [ReadOnly] public Rigidbody grabbedRb;
     public float breakVal = 4;

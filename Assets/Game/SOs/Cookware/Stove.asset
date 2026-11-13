@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba0a3cc1a024a8c90abec86f4f445f2, type: 3}
   m_Name: Stove
   m_EditorClassIdentifier: Assembly-CSharp::CookwareSO
-  cookwarePrompt: Turn On Stove
+  cookwarePrompt: Cook Ingredients
