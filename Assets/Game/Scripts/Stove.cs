@@ -10,9 +10,11 @@ using UnityEngine;
 public class Stove : Cookware
 {
     [ReadOnly] public GameObject itemOnStove;
-    [Required] public Transform stoveReparentPos;
     [Required] public CookwareIngredientCombinationLoc stoveEntryLoc;
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
+    public float burnTimer = 0;
+    public float timeToBurn = 15;
+    public bool isCooked = false;
     public float cookSpeed = 0.02f;
     public bool isCooking = false;
     public bool hasItemOnStove;
@@ -35,13 +37,17 @@ public class Stove : Cookware
     {
         isCooking = false;
         cookwareProgressSlider.gameObject.SetActive(false);
+        if (isCooked)
+        {
+            ProduceOutcome();
+            isCooked = false;
+        }
     }
     
     public void PutItemOnStove()
     {
         if (resetting) return;
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
-        item.transform.SetParent(stoveReparentPos);
         item.transform.localPosition = Vector3.zero;
         item.transform.localRotation = Quaternion.identity;
         if(item.Has(out Collider c)) c.enabled = false;
@@ -61,18 +67,14 @@ public class Stove : Cookware
         if (!hasItemOnStove) return;
         if (!isCooking) return;
         if (resetting) return;
-        ProgressCookware(-cookSpeed);
         Debug.Log("Stove: Time Remaining: " + cookwareProgress);
-        if (itemOnStove == cookwareOutcome.Pr_pickup)
+        isCooked = ProgressCookwareDelayedOutcome(-cookSpeed);
+        if (isCooked)
         {
-            cookwareOutcome = burntFoodOutcome;
-            ProgressCookware(-cookSpeed);
+            burnTimer -= Time.deltaTime;
+            if (burnTimer <= 0)
+                cookwareOutcome = burntFoodOutcome;
         }
-        else
-        {
-            ProgressCookware(-cookSpeed);
-        }
-        
     }
 
     public override bool OnInteract(InteractionEventCtx ctx)
@@ -84,7 +86,6 @@ public class Stove : Cookware
 
     public override void ProduceOutcome()
     {
-  
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
         itemOnStove = null;

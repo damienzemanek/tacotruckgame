@@ -35,7 +35,7 @@ public sealed class MeatGrinder : Cookware
         if (!hasMeatAlready) return;
         if (!isMouseHeldAndMeatIsGrinding) return;
         if (resetting) return;
-        ProgressCookware(-meatUsageSpeed);
+        ProgressCookwareLinear(-meatUsageSpeed);
         Debug.Log("Meat Grinder: Meat Remaining: " + cookwareProgress);
     }
 

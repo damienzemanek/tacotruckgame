@@ -37,11 +37,18 @@ public abstract class Cookware : Interactible
     
     public void ResetProgress() => cookwareProgressSlider.value = 1f;
     
-    public bool ProgressCookware(float progressAmount)
+    public bool ProgressCookwareLinear(float progressAmount)
     {
         cookwareProgressSlider.MutateValue(progressAmount);
         if (!cookwareProgressSlider.IsEmpty) return false;
         ProduceOutcome();
+        return true;
+    }
+
+    public bool ProgressCookwareDelayedOutcome(float progressAmount)
+    {
+        cookwareProgressSlider.MutateValue(progressAmount);
+        if (!cookwareProgressSlider.IsEmpty) return false;
         return true;
     }
     

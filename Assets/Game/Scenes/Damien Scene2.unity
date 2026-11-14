@@ -924,7 +924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 933153889}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Stove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1332,9 +1332,11 @@ MonoBehaviour:
   cookwareOutcome: {fileID: 11400000, guid: 44f53677c09846146ba4a29bd26f6adb, type: 2}
   _cookwareSO: {fileID: 11400000, guid: 0c5fd7175f5682b4cb88b340394a94f6, type: 2}
   itemOnStove: {fileID: 0}
-  stoveReparentPos: {fileID: 1407209693}
   stoveEntryLoc: {fileID: 34740919}
   burntFoodOutcome: {fileID: 11400000, guid: 661e24a8659d991459dffef4a4c61d70, type: 2}
+  burnTimer: 0
+  timeToBurn: 15
+  isCooked: 0
   cookSpeed: 0.02
   isCooking: 0
   hasItemOnStove: 0
@@ -1410,8 +1412,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: 4
-  m_BreakTorque: 4
+  m_BreakForce: 200
+  m_BreakTorque: 200
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -1430,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabber
   joint: {fileID: 1010879337}
   grabbedRb: {fileID: 0}
-  breakVal: 20
+  breakVal: 200
 --- !u!1 &1065363349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,7 +1954,7 @@ Transform:
   m_GameObject: {fileID: 1407209692}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.139, y: 1.239, z: -0.248}
+  m_LocalPosition: {x: 0.177, y: 1.239, z: -0.248}
   m_LocalScale: {x: 1.8508027, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3427,7 +3429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
   _camera: {fileID: 2449774808612560911}
-  _interactDistance: 6
+  _interactDistance: 4
   _textbox: {fileID: 1535687742}
   grabber: {fileID: 1010879338}
   interactionMask:
