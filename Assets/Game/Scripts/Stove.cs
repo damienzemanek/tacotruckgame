@@ -12,6 +12,7 @@ public class Stove : Cookware
     [ReadOnly] public GameObject itemOnStove;
     [Required] public CookwareIngredientCombinationLoc stoveEntryLoc;
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
+    [SerializeField] GameObject go_FireEff;
     public float burnTimer = 0;
     public float timeToBurn = 15;
     public bool isCooked = false;
@@ -25,11 +26,13 @@ public class Stove : Cookware
         stoveEntryLoc.onHasAllIngredients += PutItemOnStove;
         stoveEntryLoc.onNoLongerHasAllIngredients += RemoveItemFromStove;
         isCooking = false;
+        go_FireEff.gameObject.SetActive(false);
     }
 
     public void StartStove()
     {
         isCooking = true;
+        go_FireEff.gameObject.SetActive(true);
         if(itemOnStove != null && !resetting)
             cookwareProgressSlider.gameObject.SetActive(true);
     }
@@ -37,6 +40,8 @@ public class Stove : Cookware
     public void StopStove()
     {
         isCooking = false;
+        go_FireEff.gameObject.SetActive(false);
+
         cookwareProgressSlider.gameObject.SetActive(false);
         if (isCooked)
         {
@@ -51,6 +56,7 @@ public class Stove : Cookware
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
         itemOnStove = item;
         Debug.Log("Put Item On");
+        burnTimer = timeToBurn;
     }
 
     public void RemoveItemFromStove()
@@ -67,7 +73,7 @@ public class Stove : Cookware
         // For logan: Progress the cookware, if the stove is cooking, has an item, and is not resseting,
         // it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
         if(!stoveEntryLoc.hasAllIngredients) return;
-        if (itemOnStove != null) return;
+        if (itemOnStove == null) return;
         if (!isCooking) return;
         if (resetting) return;
         Debug.Log("Stove: Time Remaining: " + cookwareProgress);

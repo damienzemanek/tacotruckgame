@@ -21,6 +21,8 @@ MonoBehaviour:
       type: {class: IngredientCombinationDb/IngredientCombinationResult, ns: , asm: Assembly-CSharp}
       data:
         combinations:
-        - {fileID: 11400000, guid: 58ac66222616af94d9203b7713604ca2, type: 2}
-        - {fileID: 11400000, guid: 0283267e2aaade147a2073deb5d9f650, type: 2}
+        - ingredientSO: {fileID: 11400000, guid: 58ac66222616af94d9203b7713604ca2, type: 2}
+          consumedWhenCombined: 0
+        - ingredientSO: {fileID: 11400000, guid: 0283267e2aaade147a2073deb5d9f650, type: 2}
+          consumedWhenCombined: 1
         result: {fileID: 11400000, guid: 61e68cecec9e12d49bacf1db513c4724, type: 2}

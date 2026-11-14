@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,16 +12,20 @@ public class Ingredient : MonoBehaviour
     {
         if (!collision.gameObject.TryGetComponent(out Ingredient collidedIngredient)) return;
         if (!PersistentConfigurationDataHolder.Instance.ingredientCombinationDb
-                .TryGetResult(out var result, pickup._pickupSO, collidedIngredient.pickup._pickupSO)) return;
+                .TryGetCombination(out var comb, pickup._pickupSO, collidedIngredient.pickup._pickupSO)) return;
         
         if(collidedIngredient.outcomeDetermined || outcomeDetermined) return;
         outcomeDetermined = true;
         collidedIngredient.outcomeDetermined = true;
         
-        collidedIngredient.gameObject.SetActive(false);
         Vector3 midpoint = (transform.position + collidedIngredient.transform.position) / 2f;
-        Instantiate(result.Pr_pickup, midpoint, Quaternion.identity);
-        Debug.Log("[INGREDIENT] Ingredients combined: " + pickup._pickupSO + " + " + collidedIngredient.pickup._pickupSO + " = " + result.Pr_pickup.name);
-        Destroy(gameObject);
+        Instantiate(comb.result.Pr_pickup, midpoint, Quaternion.identity);
+        Debug.Log("[INGREDIENT] Ingredients combined: " + pickup._pickupSO + " + " + collidedIngredient.pickup._pickupSO + " = " + comb.result.Pr_pickup.name);
+
+        var otherPickup = comb.combinations.FirstOrDefault(c => c.ingredientSO == pickup._pickupSO);
+        if (otherPickup != null) Destroy(gameObject);
+        
+        var myPickup = comb.combinations.FirstOrDefault(c => c.ingredientSO == pickup._pickupSO);
+        if (myPickup != null) Destroy(gameObject);
     }
 }
