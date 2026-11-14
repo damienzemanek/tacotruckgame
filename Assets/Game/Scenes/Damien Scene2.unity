@@ -1337,7 +1337,7 @@ MonoBehaviour:
   burnTimer: 0
   timeToBurn: 15
   isCooked: 0
-  cookSpeed: 0.02
+  cookSpeed: 0.01
   isCooking: 0
   hasItemOnStove: 0
   resetting: 0
@@ -1353,6 +1353,7 @@ GameObject:
   - component: {fileID: 1010879335}
   - component: {fileID: 1010879338}
   - component: {fileID: 1010879337}
+  - component: {fileID: 1010879339}
   m_Layer: 0
   m_Name: Grabber Parent
   m_TagString: Untagged
@@ -1412,8 +1413,8 @@ FixedJoint:
   serializedVersion: 1
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: 200
-  m_BreakTorque: 200
+  m_BreakForce: 10000
+  m_BreakTorque: 10000
   m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
@@ -1432,7 +1433,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grabber
   joint: {fileID: 1010879337}
   grabbedRb: {fileID: 0}
-  breakVal: 200
+  releaseForce: 1.25
+  breakVal: 10000
+--- !u!145 &1010879339
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010879333}
+  serializedVersion: 4
+  m_ConnectedBody: {fileID: 0}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_Spring: 10
+  m_Damper: 0.2
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &1065363349
 GameObject:
   m_ObjectHideFlags: 0
@@ -3429,7 +3455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactor
   _camera: {fileID: 2449774808612560911}
-  _interactDistance: 4
+  _interactDistance: 3
   _textbox: {fileID: 1535687742}
   grabber: {fileID: 1010879338}
   interactionMask:

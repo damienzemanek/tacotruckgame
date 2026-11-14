@@ -17,19 +17,20 @@ public class Stove : Cookware
     public bool isCooked = false;
     public float cookSpeed = 0.02f;
     public bool isCooking = false;
-    public bool hasItemOnStove;
     public bool resetting;
 
+    
     void Start()
     {
         stoveEntryLoc.onHasAllIngredients += PutItemOnStove;
+        stoveEntryLoc.onNoLongerHasAllIngredients += RemoveItemFromStove;
         isCooking = false;
     }
 
     public void StartStove()
     {
         isCooking = true;
-        if(hasItemOnStove && !resetting)
+        if(itemOnStove != null && !resetting)
             cookwareProgressSlider.gameObject.SetActive(true);
     }
 
@@ -48,12 +49,14 @@ public class Stove : Cookware
     {
         if (resetting) return;
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
-        item.transform.localPosition = Vector3.zero;
-        item.transform.localRotation = Quaternion.identity;
-        if(item.Has(out Collider c)) c.enabled = false;
         itemOnStove = item;
-        hasItemOnStove = true;
         Debug.Log("Put Item On");
+    }
+
+    public void RemoveItemFromStove()
+    {
+        itemOnStove = null;
+        Debug.Log("Remove Item From Stove");
     }
     
     public void StopResetTime() => resetting = false;
@@ -64,7 +67,7 @@ public class Stove : Cookware
         // For logan: Progress the cookware, if the stove is cooking, has an item, and is not resseting,
         // it goes over, produce the burnt food outcome instead of the regular one (the regular one is in the parent named 'cookwareOutcome')
         if(!stoveEntryLoc.hasAllIngredients) return;
-        if (!hasItemOnStove) return;
+        if (itemOnStove != null) return;
         if (!isCooking) return;
         if (resetting) return;
         Debug.Log("Stove: Time Remaining: " + cookwareProgress);
@@ -88,9 +91,8 @@ public class Stove : Cookware
     {
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
-        itemOnStove = null;
         Destroy(itemOnStove);
-        hasItemOnStove = false;
+        itemOnStove = null;
         isCooking = false;
         stoveEntryLoc.ResetProgress();
         stoveEntryLoc.hasAllIngredients = false;

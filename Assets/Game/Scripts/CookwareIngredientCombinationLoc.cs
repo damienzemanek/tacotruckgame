@@ -22,6 +22,7 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
     [SerializeField] public IngredientCombinationProgression[] ingredientProgress;
     [NonSerialized, ShowInInspector] public List<(Collider, int)> enteredIndiceCache = new();
     public Action onHasAllIngredients;
+    public Action onNoLongerHasAllIngredients;
     
 
     void OnTriggerEnter(Collider other)
@@ -42,34 +43,36 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        if (!other.TryGetComponent(out Ingredient _)) return;
         if (preventIngredientEntries) return;
-        if (enteredIndiceCache.Count == 0) return;
         foreach (var (collider, index) in enteredIndiceCache)
         {
             if (collider != other) continue;
             ref IngredientCombinationProgression progress = ref ingredientProgress[index];
             progress.hasIngredient = false;
+            progress.ingredientGO = null;
             enteredIndiceCache.Remove((collider, index));
             Debug.Log("Exited " + progress.ingredient.Pr_pickup.name);
             break;
         }
+
+        hasAllIngredients = false;
+        onNoLongerHasAllIngredients?.Invoke();
     }
     
     
     void CheckHasAllIngredients()
     {
         if (!ingredientProgress.All(p => p.hasIngredient)) return;
-        if (hasAllIngredients) return;
         Debug.Log("Cookware Ingredient Combination Loc: Has all ingredients");
         hasAllIngredients = true;
         onHasAllIngredients?.Invoke();
-        ConsumeConsumableIngredients();
-        ResetProgress();
+        TryConsumeConsumableIngredients();
     }
     
     public void SetPreventIngredientEntries(bool v) => preventIngredientEntries = v;
 
-    public void ConsumeConsumableIngredients()
+    public void TryConsumeConsumableIngredients()
     {
         foreach (var i in ingredientProgress)
         {
