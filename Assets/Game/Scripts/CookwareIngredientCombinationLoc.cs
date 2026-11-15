@@ -30,7 +30,17 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
         if (preventIngredientEntries) return;
         if (!other.TryGetComponent(out Ingredient ingredient)) return;
         int index = Array.FindIndex(ingredientProgress, p => p.ingredient == ingredient.pickup._pickupSO);
-        if (index == -1) return;
+        if (index == -1)
+        {
+            // FOR LOGAN:
+            
+            // Create a TMPRO on the player's UI that will tell the player with a dialauge prompt
+            // that they cannoot put this item in the cookware because it is not a valid ingredient for this cookware.
+            // Make the prompt last for 4 seconds and disapear.
+            
+            //
+            return;
+        }
         ref IngredientCombinationProgression progress = ref ingredientProgress[index];
         progress.ingredientGO = other.gameObject;
         enteredIndiceCache.Add((other, index)); 
