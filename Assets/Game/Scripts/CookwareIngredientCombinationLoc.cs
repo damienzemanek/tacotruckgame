@@ -4,6 +4,8 @@ using System.Linq;
 using EMILtools.Extensions;
 using NUnit.Framework;
 using Sirenix.OdinInspector;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CookwareIngredientCombinationLoc : MonoBehaviour
@@ -23,7 +25,16 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
     [NonSerialized, ShowInInspector] public List<(Collider, int)> enteredIndiceCache = new();
     public Action onHasAllIngredients;
     public Action onNoLongerHasAllIngredients;
+    private static Canvas _uiCanvas;
+
+    private static UserInterface _interfaceScript;
     
+    
+
+    void Awake()
+    {
+        _uiCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -35,12 +46,22 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
             // FOR LOGAN:
             
             // Create a TMPRO on the player's UI that will tell the player with a dialauge prompt
-            // that they cannoot put this item in the cookware because it is not a valid ingredient for this cookware.
+            // that they cannot put this item in the cookware because it is not a valid ingredient for this cookware.
             // Make the prompt last for 4 seconds and disapear.
-            
+
+            _interfaceScript = _uiCanvas.GetComponent<UserInterface>();
+            if(_interfaceScript != null)
+            {
+                _interfaceScript.SpawnNewUIText(0f,50f,"Warning",36,Color.red,4f,true,"Incompatible Item");
+            }
+            else
+            {
+               throw new ArgumentException("User Interface script is Null.");
+            }
             //
             return;
         }
+
         ref IngredientCombinationProgression progress = ref ingredientProgress[index];
         progress.ingredientGO = other.gameObject;
         enteredIndiceCache.Add((other, index)); 
@@ -48,6 +69,7 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
  
         Debug.Log("Entered " + ingredient.pickup._pickupSO.name);
         CheckHasAllIngredients();
+        
     }
     
 
