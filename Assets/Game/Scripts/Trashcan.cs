@@ -7,11 +7,15 @@ using UnityEngine.UIElements;
 
 public class Trashcan : MonoBehaviour
 {
-    public Collider _trashBox;
+    private Collider _trashBox;
 
     void Awake()
     {
         _trashBox = GetComponent<Collider>();
+        if(_trashBox == null)
+        {
+            throw new ArgumentException("Trashcan Collider is Null.");
+        }
     }
     void OnTriggerEnter(Collider other)
     {
