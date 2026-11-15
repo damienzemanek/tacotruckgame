@@ -13,6 +13,7 @@
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="StateBufferedTesting.csproj" />
   <Project Path="MonoFacadeTesting.csproj" />
+  <Project Path="ResolverTestSuite.csproj" />
   <Project Path="PublisherTesting.csproj" />
   <Project Path="ProSM.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
