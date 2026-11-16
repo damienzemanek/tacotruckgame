@@ -20,8 +20,6 @@ public class UserInterface : MonoBehaviour
     [SerializeField] public int _fontSize = 36;
     [SerializeField] public float _xOffset = 0.0f;
     [SerializeField] public float _yOffset= 0.0f;
-    [SerializeField] public float _xSize = 200.0f;
-    [SerializeField] public float _ySize = 200.0f;
     [SerializeField] public Color _textColor = Color.black;
     [SerializeField] public bool _textDissapears = true;
     [SerializeField] public float _dissapearTime = 4.0f;
