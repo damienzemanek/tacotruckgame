@@ -31,10 +31,6 @@ public class UserInterface : MonoBehaviour
         _uiCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
     }
 
-    void Update()
-    {
-        
-    }
     public void SpawnNewUIText(float _xOffset,float _yOffset, string _textName, int _fontSize, Color _textColor,float _disappearTime,bool _textDissapears, string _newTextReads)
     {
        GameObject _newTextObject = new GameObject(_textName);
