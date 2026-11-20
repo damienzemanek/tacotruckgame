@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
+    private void LateUpdate()
+    {
+        transform.position = transform.position.With(y: 0);
+    }
+
 
     void Move()
     {

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Logan Scene.unity
-    guid: 3b8e0255e9ee3a24285fb6f01589b18d
+    path: Assets/Game/Scenes/LevelBlockoutCopy.unity
+    guid: 82e3bd9e95a861047af33b12a7d19581
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

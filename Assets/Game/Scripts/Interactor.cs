@@ -66,7 +66,7 @@ public class Interactor : MonoBehaviour
                 
                 break;
             case Customer customer:
-        
+                customer.OrderTaken();
                 break;
             default:
                 Debug.LogError($"No matching interaction type: {interactible.GetType().Name}");
