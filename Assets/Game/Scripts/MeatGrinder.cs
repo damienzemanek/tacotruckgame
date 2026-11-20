@@ -14,7 +14,12 @@ public sealed class MeatGrinder : Cookware
         meatEntryLoc.onHasAllIngredients += PutMeatInGrinder;
         base.Awake();
     }
-    
+
+    private void Start()
+    {
+        StopShowingInfoText();
+    }
+
     public void PutMeatInGrinder()
     {
         if (resetting) return;
@@ -22,6 +27,7 @@ public sealed class MeatGrinder : Cookware
         hasMeatAlready = true;
         meatEntryLoc.hasAllIngredients = false;
         meatEntryLoc.SetPreventIngredientEntries(true);
+        ShowInfoText("Ready!");
         Debug.Log("Meat Grinder: Put meat in grinder");
     }
     
@@ -45,6 +51,7 @@ public sealed class MeatGrinder : Cookware
         base.OnInteract(ctx);
         isMouseHeldAndMeatIsGrinding = true;
         cookwareProgressSlider.gameObject.SetActive(hasMeatAlready);
+        StopShowingInfoText();
         return true;
     }
 
@@ -53,6 +60,11 @@ public sealed class MeatGrinder : Cookware
         Debug.Log("Meat Grinder: Stopped using");
         isMouseHeldAndMeatIsGrinding = false;
         cookwareProgressSlider.gameObject.SetActive(false);
+        if(hasMeatAlready)
+            ShowInfoText("Ready!");
+        else
+            StopShowingInfoText();
+
         return base.OnStopInteract(ctx);
     }
     
@@ -67,6 +79,7 @@ public sealed class MeatGrinder : Cookware
         meatEntryLoc.ResetProgress();
         meatEntryLoc.hasAllIngredients = false;
         resetting = true;
+        StopShowingInfoText();
         Invoke(nameof(StopResetTime), 0.5f);
         Debug.Log("Meat Grinder: Produced meat");
 

@@ -23,10 +23,19 @@ public class Stove : Cookware
     
     void Start()
     {
+        StopShowingInfoText();
         stoveEntryLoc.onHasAllIngredients += PutItemOnStove;
         stoveEntryLoc.onNoLongerHasAllIngredients += RemoveItemFromStove;
         isCooking = false;
         go_FireEff.gameObject.SetActive(false);
+    }
+
+    void ResetStove()
+    {
+        isCooking = false;
+        go_FireEff.gameObject.SetActive(false);
+        StopShowingInfoText();
+        cookwareProgressSlider.gameObject.SetActive(false);
     }
 
     public void StartStove()
@@ -39,15 +48,12 @@ public class Stove : Cookware
 
     public void StopStove()
     {
-        isCooking = false;
-        go_FireEff.gameObject.SetActive(false);
-
-        cookwareProgressSlider.gameObject.SetActive(false);
-        if (isCooked)
-        {
-            ProduceOutcome();
-            isCooked = false;
-        }
+        ResetStove();
+        if(itemOnStove && !isCooked)
+            ShowInfoText("Ready!");
+        if (!isCooked || !itemOnStove) return;
+        ProduceOutcome();
+        isCooked = false;
     }
     
     public void PutItemOnStove()
@@ -56,11 +62,13 @@ public class Stove : Cookware
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
         itemOnStove = item;
         Debug.Log("Put Item On");
+        ShowInfoText("Ready!");
         burnTimer = timeToBurn;
     }
 
     public void RemoveItemFromStove()
     {
+        ResetStove();
         itemOnStove = null;
         Debug.Log("Remove Item From Stove");
     }
@@ -80,6 +88,7 @@ public class Stove : Cookware
         isCooked = ProgressCookwareDelayedOutcome(-cookSpeed);
         if (isCooked)
         {
+            ShowInfoText("!");
             burnTimer -= Time.deltaTime;
             if (burnTimer <= 0)
                 cookwareOutcome = burntFoodOutcome;
@@ -95,6 +104,7 @@ public class Stove : Cookware
 
     public override void ProduceOutcome()
     {
+        StopShowingInfoText();
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
         Destroy(itemOnStove);
@@ -105,7 +115,7 @@ public class Stove : Cookware
         
         resetting = true;
         Invoke(nameof(StopResetTime), 0.5f);
-        Debug.Log("Meat Grinder: Produced meat");
+        Debug.Log("Stove: Outcome Produced");
 
     }
 }

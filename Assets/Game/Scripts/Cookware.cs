@@ -13,6 +13,7 @@ public abstract class Cookware : Interactible
     [SerializeField, Required] protected Transform cookwareOutcomeCreationPosition;
     [SerializeField, Required] protected PickupSO cookwareOutcome;
     [SerializeField, Required] public CookwareSO _cookwareSO;
+    [SerializeField] public TextMeshPro txt_infoText;
     
     public override InteractionEventCtx GetInteractionCtx(Interactor withInteractor) => new()
     {
@@ -51,6 +52,14 @@ public abstract class Cookware : Interactible
         if (!cookwareProgressSlider.IsEmpty) return false;
         return true;
     }
+
+    public void ShowInfoText(string txt)
+    {
+        txt_infoText.gameObject.SetActive(true);
+        txt_infoText.text = txt;
+    }
+
+    public void StopShowingInfoText() => txt_infoText.gameObject.SetActive(false);
     
     public abstract void ProduceOutcome(); // All cookware will have an outcome associated with their usage
 }
