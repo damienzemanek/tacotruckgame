@@ -51,6 +51,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   _pickupSO: {fileID: 11400000, guid: cf88071049e8ced46be8ea94fbd95535, type: 2}
   _rb: {fileID: 2274258201080199909}
+  traits:
+  - burnTimer: 0
+    burnMaxTime: 10
 --- !u!114 &2727180109390103545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +165,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

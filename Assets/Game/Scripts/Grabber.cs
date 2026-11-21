@@ -11,6 +11,7 @@ public class Grabber : MonoBehaviour
     public float releaseForce = 0.5f;
     public float moveDuration = 0.5f;
     public bool grabbed = false;
+    private Sequence grab;
 
     private Vector3 grabVel;
     public float grabSmoothingTime = 0.01f;
@@ -29,7 +30,7 @@ public class Grabber : MonoBehaviour
     public void Grab(Rigidbody rigidbody)
     {
         if(grabbedRb != null) return;
-        Sequence grab = DOTween.Sequence();
+        grab = DOTween.Sequence();
         Debug.Log("Grabbed : " + rigidbody.name + "");
         rigidbody.transform.SetParent(grabPoint);
         rigidbody.useGravity = false;
@@ -42,7 +43,7 @@ public class Grabber : MonoBehaviour
     public void StopGrab()
     {
         if (grabbedRb == null) return;
-        grabbedRb.transform.position = grabPoint.position;
+        grab.Kill();
         grabbedRb.transform.SetParent(null);
         grabbedRb.ResetVel3D();
         grabbedRb.isKinematic = false;

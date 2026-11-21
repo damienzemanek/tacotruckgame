@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using EMILtools.Extensions;
+using NUnit.Framework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,12 +10,8 @@ public class Ingredient : MonoBehaviour
 {
     public Pickup pickup;
     public bool outcomeDetermined;
-
-    private void Start()
-    {
-
-
-    }
+    
+    public List<PickupTrait> traits = new List<PickupTrait>();
 
     public void OnCollisionEnter(Collision collision)
     {
