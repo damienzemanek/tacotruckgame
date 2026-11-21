@@ -1,39 +1,54 @@
 using System;
+using DG.Tweening;
 using EMILtools.Systems;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Grabber : MonoBehaviour
 {
-    [Required] public FixedJoint joint;
     [ReadOnly] public Rigidbody grabbedRb;
-    public float releaseForce = 1.25f;
-    public float breakVal = 4;
+    public Transform grabPoint;
+    public float releaseForce = 0.5f;
+    public float moveDuration = 0.5f;
+    public bool grabbed = false;
 
+    private Vector3 grabVel;
+    public float grabSmoothingTime = 0.01f;
     
+    private void FixedUpdate()
+    {
+        if(!grabbed) return;
+        if(grabbedRb == null) return;
+        grabbedRb.transform.position = Vector3.SmoothDamp(
+            grabbedRb.transform.position,
+            grabPoint.position,
+            ref grabVel,
+            grabSmoothingTime);
+    }
+
     public void Grab(Rigidbody rigidbody)
     {
+        if(grabbedRb != null) return;
+        Sequence grab = DOTween.Sequence();
         Debug.Log("Grabbed : " + rigidbody.name + "");
-        joint.connectedBody = rigidbody;   
+        rigidbody.transform.SetParent(grabPoint);
+        rigidbody.useGravity = false;
+        rigidbody.isKinematic = true;
+        grab.Append(rigidbody.transform.DOLocalMove(Vector3.zero, moveDuration));
+        grab.OnComplete(() => grabbed = true);
         grabbedRb = rigidbody;
     }
 
     public void StopGrab()
     {
         if (grabbedRb == null) return;
-        
-        joint.connectedBody.AddForce(Vector3.down * releaseForce, ForceMode.Impulse);
-        joint.connectedBody = null;
-        if (grabbedRb != null) grabbedRb.isKinematic = false;
+        grabbedRb.transform.position = grabPoint.position;
+        grabbedRb.transform.SetParent(null);
+        grabbedRb.ResetVel3D();
+        grabbedRb.isKinematic = false;
+        grabbedRb.useGravity = true;
+        grabbed = false;
+        //grabbedRb.AddForce(Vector3.down * releaseForce, ForceMode.Impulse);
         grabbedRb = null;
-    }
-
-    void OnJointBreak(float breakForce)
-    {
-        if (grabbedRb != null) grabbedRb.isKinematic = false;
-        grabbedRb = null;
-        joint = gameObject.AddComponent<FixedJoint>();
-        joint.breakForce = breakVal;
-        joint.breakTorque = breakVal;
     }
 }

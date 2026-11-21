@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using EMILtools.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -7,7 +8,13 @@ public class Ingredient : MonoBehaviour
 {
     public Pickup pickup;
     public bool outcomeDetermined;
-    
+
+    private void Start()
+    {
+
+
+    }
+
     public void OnCollisionEnter(Collision collision)
     {
         if (!collision.gameObject.TryGetComponent(out Ingredient collidedIngredient)) return;
