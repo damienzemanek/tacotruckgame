@@ -45,7 +45,7 @@ public class IngredientPlacementZone : MonoBehaviour
             _interfaceScript = _uiCanvas.GetComponent<UserInterface>();
             if(_interfaceScript != null)
             {
-                _interfaceScript.SpawnNewUIText(0f,50f,"Warning",36,Color.red,4f,true,"Incompatible Item");
+                _interfaceScript.SpawnNewUIText(36,Color.red,"Incompatible Item");
             }
             else
             {
