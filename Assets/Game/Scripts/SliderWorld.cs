@@ -16,8 +16,9 @@ public class SliderWorld : MonoBehaviour
         SetSlider(value);
     }
     
-    void SetSlider(float value)
+    public void SetSlider(float value)
     {
+        this.value = value;
         go_Slider.localScale = new Vector3(xScaleEmpty + (xScaleFull - xScaleEmpty) * value, 1, 1);
         go_Slider.localPosition = new Vector3(xPosEmpty + (xPosFull - xPosEmpty) * value, 0, 0);
     }

@@ -1,10 +1,10 @@
 ﻿using System;
+using EMILtools.Extensions;
 using UnityEngine;
 
 public sealed class MeatGrinder : Cookware
 {
     public CookwareIngredientCombinationLoc meatEntryLoc;
-    public float meatUsageSpeed = 0.02f;
     public bool hasMeatAlready;
     public bool isMouseHeldAndMeatIsGrinding;
     public bool resetting;
@@ -17,6 +17,7 @@ public sealed class MeatGrinder : Cookware
 
     private void Start()
     {
+        cookableTrait = null;
         StopShowingInfoText();
     }
 
@@ -27,6 +28,9 @@ public sealed class MeatGrinder : Cookware
         hasMeatAlready = true;
         meatEntryLoc.hasAllIngredients = false;
         meatEntryLoc.SetPreventIngredientEntries(true);
+        cookableTrait = (CookableTrait)meatEntryLoc.ingredientProgress[0].ingredientGO.
+            Get<Ingredient>().pickup.traits
+            .Find(t => t.traitName == "Cookable");
         ShowInfoText("Ready!");
         Debug.Log("Meat Grinder: Put meat in grinder");
     }
@@ -41,12 +45,13 @@ public sealed class MeatGrinder : Cookware
         if (!hasMeatAlready) return;
         if (!isMouseHeldAndMeatIsGrinding) return;
         if (resetting) return;
-        ProgressCookwareLinear(-meatUsageSpeed);
+        ProgressCookwareLinear();
         Debug.Log("Meat Grinder: Meat Remaining: " + cookwareProgress);
     }
 
     public override bool OnInteract(InteractionEventCtx ctx)
     {
+        if (resetting) return false;
         Debug.Log("Meat Grinder: Started using");
         base.OnInteract(ctx);
         isMouseHeldAndMeatIsGrinding = true;
@@ -57,6 +62,12 @@ public sealed class MeatGrinder : Cookware
 
     public override bool OnStopInteract(InteractionEventCtx ctx)
     {
+        InternlOnStopInteractMeatGrinder();
+        return base.OnStopInteract(ctx);
+    }
+
+    void InternlOnStopInteractMeatGrinder()
+    {
         Debug.Log("Meat Grinder: Stopped using");
         isMouseHeldAndMeatIsGrinding = false;
         cookwareProgressSlider.gameObject.SetActive(false);
@@ -64,8 +75,6 @@ public sealed class MeatGrinder : Cookware
             ShowInfoText("Ready!");
         else
             StopShowingInfoText();
-
-        return base.OnStopInteract(ctx);
     }
     
 
@@ -79,7 +88,8 @@ public sealed class MeatGrinder : Cookware
         meatEntryLoc.ResetProgress();
         meatEntryLoc.hasAllIngredients = false;
         resetting = true;
-        StopShowingInfoText();
+        cookableTrait = null;
+        InternlOnStopInteractMeatGrinder();
         Invoke(nameof(StopResetTime), 0.5f);
         Debug.Log("Meat Grinder: Produced meat");
 

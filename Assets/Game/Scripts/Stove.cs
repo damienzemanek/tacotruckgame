@@ -14,7 +14,6 @@ public class Stove : Cookware
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
     [SerializeField] GameObject go_FireEff;
     public bool isCooked = false;
-    public float cookSpeed = 0.02f;
     public bool isCooking = false;
     public bool resetting;
 
@@ -40,7 +39,6 @@ public class Stove : Cookware
         if (itemOnStove == null || resetting) return;
         cookwareProgressSlider.gameObject.SetActive(true);
         StopShowingInfoText();
-
     }
 
     public void StopStove()
@@ -63,13 +61,19 @@ public class Stove : Cookware
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
         itemOnStove = item.Get<Ingredient>();
         burntTraitReference = (BurnableTrait)itemOnStove.pickup.traits.Find(t => t.traitName == "Burnable");
+        cookableTrait = (CookableTrait)itemOnStove.pickup.traits.Find(t => t.traitName == "Cookable");
         Debug.Log("Put Item On");
-        ShowInfoText("Ready!");
+        if (isCooking)
+            StartStove();
+        else
+            ShowInfoText("Ready!");
+
     }
 
     public void RemoveItemFromStove()
     {
         cookwareProgressSlider.gameObject.SetActive(false);
+        StopShowingInfoText();
         itemOnStove = null;
         burntTraitReference = null;
         Debug.Log("Remove Item From Stove");
@@ -87,14 +91,15 @@ public class Stove : Cookware
         if (!isCooking) return;
         if (resetting) return;
         Debug.Log("Stove: Time Remaining: " + cookwareProgress);
-        isCooked = ProgressCookwareDelayedOutcome(-cookSpeed);
+        isCooked = ProgressCookwareDelayedOutcome();
         if (isCooked)
         {
-            ShowInfoText("!");
+            cachedToDeleteItemOnStove = itemOnStove.gameObject;
+            cookwareProgressSlider.gameObject.SetActive(false);
+            ShowInfoText("Food Burning!");
             burntTraitReference.burnTimer -= Time.deltaTime;
             if (burntTraitReference.burnTimer <= 0)
             {
-                cachedToDeleteItemOnStove = itemOnStove.gameObject;
                 cookwareOutcome = burntFoodOutcome;
                 ProduceOutcome();
                 isCooked = false;
@@ -117,7 +122,7 @@ public class Stove : Cookware
         Destroy(cachedToDeleteItemOnStove);
         cachedToDeleteItemOnStove = null;
         itemOnStove = null;
-        isCooking = false;
+        burntTraitReference = null;
         stoveEntryLoc.ResetProgress();
         stoveEntryLoc.hasAllIngredients = false;
         

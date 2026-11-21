@@ -11,6 +11,7 @@ public class Pickup : Interactible
 
     private void OnEnable()
     {
+        if (traits == null || traits.Count == 0) return;
         foreach (var t in traits) t.ResetTrait();
     }
 
@@ -34,6 +35,17 @@ public abstract class PickupTrait
 {
     public abstract string traitName { get; }
     public abstract void ResetTrait();
+}
+
+
+[Serializable]
+public class CookableTrait : PickupTrait
+{
+    public override string traitName => "Cookable";
+    public float cookTimer = 0;
+    public float cookTimeMax = 5f;
+    public float perc01 =>  cookTimer / cookTimeMax;
+    public override void ResetTrait() => cookTimer = cookTimeMax;
 }
 
 [Serializable]

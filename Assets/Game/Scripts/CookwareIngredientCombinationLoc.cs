@@ -110,7 +110,6 @@ public class CookwareIngredientCombinationLoc : MonoBehaviour
         {
             if (!i.ingredient.ConsumableViaCookware.Contains(cookwareParent._cookwareSO)) continue;
             i.ingredientGO.gameObject.SetActive(false);
-            Destroy(i.ingredientGO);
         }
     }
     
