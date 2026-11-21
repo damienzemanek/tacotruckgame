@@ -14,6 +14,8 @@ public abstract class Cookware : Interactible
     [SerializeField, Required] protected PickupSO cookwareOutcome;
     [SerializeField, Required] public CookwareSO _cookwareSO;
     [SerializeField] public TextMeshPro txt_infoText;
+
+    public CookableTrait cookableTrait = null;
     
     public override InteractionEventCtx GetInteractionCtx(Interactor withInteractor) => new()
     {
@@ -29,6 +31,11 @@ public abstract class Cookware : Interactible
         cookwareProgressSlider.gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        cookableTrait = null;
+    }
+
     public override bool OnInteract(InteractionEventCtx ctx)
     {
         //Debug.Log("[COOKWARE]: OnInteract Called");
@@ -38,17 +45,19 @@ public abstract class Cookware : Interactible
     
     public void ResetProgress() => cookwareProgressSlider.value = 1f;
     
-    public bool ProgressCookwareLinear(float progressAmount)
+    public bool ProgressCookwareLinear()
     {
-        cookwareProgressSlider.MutateValue(progressAmount);
+        cookableTrait.cookTimer -= Time.deltaTime;
+        cookwareProgressSlider.SetSlider(cookableTrait.perc01);
         if (!cookwareProgressSlider.IsEmpty) return false;
         ProduceOutcome();
         return true;
     }
 
-    public bool ProgressCookwareDelayedOutcome(float progressAmount)
+    public bool ProgressCookwareDelayedOutcome()
     {
-        cookwareProgressSlider.MutateValue(progressAmount);
+        cookableTrait.cookTimer -= Time.deltaTime;
+        cookwareProgressSlider.SetSlider(cookableTrait.perc01);
         if (!cookwareProgressSlider.IsEmpty) return false;
         return true;
     }

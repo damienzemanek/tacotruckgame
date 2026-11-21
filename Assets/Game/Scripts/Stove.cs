@@ -9,17 +9,16 @@ using UnityEngine;
 /// </summary>
 public class Stove : Cookware
 {
-    [ReadOnly] public GameObject itemOnStove;
+    [ReadOnly] public Ingredient itemOnStove;
     [Required] public CookwareIngredientCombinationLoc stoveEntryLoc;
     [SerializeField, Required] protected PickupSO burntFoodOutcome;
     [SerializeField] GameObject go_FireEff;
-    public float burnTimer = 0;
-    public float timeToBurn = 15;
     public bool isCooked = false;
-    public float cookSpeed = 0.02f;
     public bool isCooking = false;
     public bool resetting;
 
+    GameObject cachedToDeleteItemOnStove = null;
+    [ReadOnly, SerializeReference] public BurnableTrait burntTraitReference = null;
     
     void Start()
     {
@@ -28,27 +27,27 @@ public class Stove : Cookware
         stoveEntryLoc.onNoLongerHasAllIngredients += RemoveItemFromStove;
         isCooking = false;
         go_FireEff.gameObject.SetActive(false);
+        burntTraitReference = null;
     }
 
-    void ResetStove()
-    {
-        isCooking = false;
-        go_FireEff.gameObject.SetActive(false);
-        StopShowingInfoText();
-        cookwareProgressSlider.gameObject.SetActive(false);
-    }
+
 
     public void StartStove()
     {
         isCooking = true;
         go_FireEff.gameObject.SetActive(true);
-        if(itemOnStove != null && !resetting)
-            cookwareProgressSlider.gameObject.SetActive(true);
+        if (itemOnStove == null || resetting) return;
+        cookwareProgressSlider.gameObject.SetActive(true);
+        StopShowingInfoText();
     }
 
     public void StopStove()
     {
-        ResetStove();
+        isCooking = false;
+        go_FireEff.gameObject.SetActive(false);
+        StopShowingInfoText();
+        cookwareProgressSlider.gameObject.SetActive(false);
+        
         if(itemOnStove && !isCooked)
             ShowInfoText("Ready!");
         if (!isCooked || !itemOnStove) return;
@@ -60,16 +59,23 @@ public class Stove : Cookware
     {
         if (resetting) return;
         var item = stoveEntryLoc.ingredientProgress[0].ingredientGO;
-        itemOnStove = item;
+        itemOnStove = item.Get<Ingredient>();
+        burntTraitReference = (BurnableTrait)itemOnStove.pickup.traits.Find(t => t.traitName == "Burnable");
+        cookableTrait = (CookableTrait)itemOnStove.pickup.traits.Find(t => t.traitName == "Cookable");
         Debug.Log("Put Item On");
-        ShowInfoText("Ready!");
-        burnTimer = timeToBurn;
+        if (isCooking)
+            StartStove();
+        else
+            ShowInfoText("Ready!");
+
     }
 
     public void RemoveItemFromStove()
     {
-        ResetStove();
+        cookwareProgressSlider.gameObject.SetActive(false);
+        StopShowingInfoText();
         itemOnStove = null;
+        burntTraitReference = null;
         Debug.Log("Remove Item From Stove");
     }
     
@@ -85,13 +91,19 @@ public class Stove : Cookware
         if (!isCooking) return;
         if (resetting) return;
         Debug.Log("Stove: Time Remaining: " + cookwareProgress);
-        isCooked = ProgressCookwareDelayedOutcome(-cookSpeed);
+        isCooked = ProgressCookwareDelayedOutcome();
         if (isCooked)
         {
-            ShowInfoText("!");
-            burnTimer -= Time.deltaTime;
-            if (burnTimer <= 0)
+            cachedToDeleteItemOnStove = itemOnStove.gameObject;
+            cookwareProgressSlider.gameObject.SetActive(false);
+            ShowInfoText("Food Burning!");
+            burntTraitReference.burnTimer -= Time.deltaTime;
+            if (burntTraitReference.burnTimer <= 0)
+            {
                 cookwareOutcome = burntFoodOutcome;
+                ProduceOutcome();
+                isCooked = false;
+            }
         }
     }
 
@@ -107,9 +119,10 @@ public class Stove : Cookware
         StopShowingInfoText();
         Instantiate(cookwareOutcome.Pr_pickup, cookwareOutcomeCreationPosition.position, Quaternion.identity);
         ResetProgress();
-        Destroy(itemOnStove);
+        Destroy(cachedToDeleteItemOnStove);
+        cachedToDeleteItemOnStove = null;
         itemOnStove = null;
-        isCooking = false;
+        burntTraitReference = null;
         stoveEntryLoc.ResetProgress();
         stoveEntryLoc.hasAllIngredients = false;
         

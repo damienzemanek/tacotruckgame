@@ -51,6 +51,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   _pickupSO: {fileID: 11400000, guid: cf88071049e8ced46be8ea94fbd95535, type: 2}
   _rb: {fileID: 2274258201080199909}
+  traits:
+  - rid: 3631615914333962496
+  - rid: 3631615914333962500
+  references:
+    version: 2
+    RefIds:
+    - rid: 3631615914333962496
+      type: {class: BurnableTrait, ns: , asm: Assembly-CSharp}
+      data:
+        burnTimer: 0
+        burnMaxTime: 10
+    - rid: 3631615914333962500
+      type: {class: CookableTrait, ns: , asm: Assembly-CSharp}
+      data:
+        cookTimer: 0
+        cookTimeMax: 5
 --- !u!114 &2727180109390103545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +178,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
